@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>ZoneAudio — Controller</title>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -19,6 +20,48 @@
 .sync-badge{font-family:var(--mn);font-size:9px;padding:4px 10px;border-radius:12px;background:rgba(162,155,254,.12);color:#a29bfe;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all .2s}.sync-badge:hover{border-color:#a29bfe}
 .mbtn{padding:7px 14px;border:1px solid var(--bd);border-radius:var(--rs);font-family:var(--mn);font-size:10px;font-weight:600;cursor:pointer;color:var(--t2);background:var(--sf);transition:all .2s}.mbtn:hover{border-color:var(--bl);color:var(--tx)}
 .lb{font-family:var(--mn);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--t3)}
+
+/* ─── Prayer Panel ─── */
+.prayer-panel{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;margin-bottom:16px;position:relative;overflow:hidden}
+.prayer-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#fdcb6e,#f39c12,#e84393)}
+.prayer-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.prayer-title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.prayer-title .mosque{font-size:18px}
+.prayer-toggle{display:flex;align-items:center;gap:8px}
+.prayer-toggle label{font-family:var(--mn);font-size:9px;color:var(--t2);letter-spacing:1px}
+.switch{position:relative;width:42px;height:24px;cursor:pointer}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:var(--bd);border-radius:12px;transition:.3s}
+.slider::before{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;left:3px;top:3px;transition:.3s}
+.switch input:checked+.slider{background:var(--gn)}
+.switch input:checked+.slider::before{transform:translateX(18px)}
+
+.next-athan{background:var(--bg);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.next-label{font-family:var(--mn);font-size:10px;color:var(--t3);letter-spacing:1px}
+.next-name{font-size:14px;font-weight:600;color:var(--am)}
+.next-time{font-family:var(--mn);font-size:13px;font-weight:600;color:var(--tx)}
+.next-countdown{font-family:var(--mn);font-size:11px;color:var(--t2)}
+.mute-active{background:rgba(255,107,129,.08);border-color:rgba(255,107,129,.3)}
+.mute-active .next-label{color:var(--rd)}
+
+.prayer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.prayer-tile{background:var(--bg);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 8px;text-align:center;position:relative}
+.prayer-tile.active{border-color:var(--am);background:rgba(253,203,110,.06)}
+.prayer-tile.disabled{opacity:.35}
+.pt-icon{font-size:16px;margin-bottom:2px}
+.pt-name{font-family:var(--mn);font-size:9px;font-weight:600;letter-spacing:1px;color:var(--t2);margin-bottom:2px}
+.pt-name-ar{font-size:11px;color:var(--t3);margin-bottom:2px}
+.pt-time{font-family:var(--mn);font-size:12px;font-weight:700;color:var(--tx)}
+.pt-toggle{margin-top:6px}
+.pt-toggle .switch{width:32px;height:18px}
+.pt-toggle .slider::before{width:14px;height:14px;left:2px;top:2px}
+.pt-toggle .switch input:checked+.slider::before{transform:translateX(14px)}
+
+.prayer-settings{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
+.prayer-settings .ps-item{display:flex;align-items:center;gap:6px;font-family:var(--mn);font-size:10px;color:var(--t3)}
+.prayer-settings select,.prayer-settings input{padding:4px 8px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;color:var(--tx);font-family:var(--mn);font-size:10px;width:50px;outline:none}
+
+/* ─── Channel strips (same as before) ─── */
 .chs{display:flex;flex-direction:column;gap:10px}
 .ch{border-radius:var(--r);border:1px solid var(--bd);background:var(--cd);overflow:hidden;transition:border-color .2s}.ch:hover{border-color:var(--bl)}
 .ch-bar{height:3px;width:100%}.ch-body{padding:18px 20px}
@@ -50,7 +93,7 @@
 .ch-err2{font-family:var(--mn);font-size:9px;color:var(--rd);margin-top:8px}
 .cfooter{font-family:var(--mn);font-size:9px;color:var(--t3);text-align:center;margin-top:20px;letter-spacing:.8px}
 .conn{text-align:center;padding:40px;font-family:var(--mn);font-size:12px;color:var(--t2)}
-@media(max-width:520px){.cbar{flex-direction:column;align-items:flex-start}.ch-body{padding:14px 16px}}
+@media(max-width:520px){.cbar{flex-direction:column;align-items:flex-start}.ch-body{padding:14px 16px}.prayer-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
@@ -65,19 +108,53 @@
       <button class="mbtn" onclick="masterCmd('stop')">⏹ ALL</button>
     </div>
   </div>
+
+  <!-- PRAYER PANEL -->
+  <div class="prayer-panel">
+    <div class="prayer-top">
+      <div class="prayer-title"><span class="mosque">🕌</span> Dubai Prayer Times</div>
+      <div class="prayer-toggle">
+        <label>AUTO-MUTE</label>
+        <label class="switch"><input type="checkbox" id="prayer-master" checked onchange="savePrayerCfg()"><span class="slider"></span></label>
+      </div>
+    </div>
+
+    <div class="next-athan" id="next-box">
+      <div><div class="next-label">NEXT PRAYER</div><div class="next-name" id="next-name">Loading…</div></div>
+      <div style="text-align:right"><div class="next-time" id="next-time">--:--</div><div class="next-countdown" id="next-cd"></div></div>
+    </div>
+
+    <div class="prayer-grid" id="prayer-grid"></div>
+
+    <div class="prayer-settings">
+      <div class="ps-item">PRE-MUTE <input type="number" id="pre-buf" value="1" min="0" max="10" onchange="savePrayerCfg()"> MIN</div>
+      <div class="ps-item">POST-UNMUTE <input type="number" id="post-buf" value="5" min="0" max="30" onchange="savePrayerCfg()"> MIN</div>
+      <div class="ps-item">EMIRATE <select id="emirate" onchange="fetchPrayers()">
+        <option>Dubai</option><option>Abu Dhabi</option><option>Sharjah</option><option>Ajman</option><option>Ras Al Khaimah</option><option>Fujairah</option>
+      </select></div>
+    </div>
+  </div>
+
   <p class="conn" id="conn">Connecting to Firebase…</p>
   <div class="chs" id="strips" style="display:none"></div>
-  <p class="cfooter">C:\MUSIC LOCAL PLAYBACK · AUTO-SYNC GOOGLE DRIVE 03:00 · LIVE VIA WEBRTC</p>
+  <p class="cfooter">LOCAL PLAYBACK · GOOGLE DRIVE SYNC 03:00 · PRAYER AUTO-MUTE · LIVE WEBRTC</p>
 </div>
+
 <script>
 const FB={apiKey:"AIzaSyDgxVnFlhE5UtQws74QDdwsU2FFs9sxCVA",databaseURL:"https://audiocontroller-670a5-default-rtdb.firebaseio.com",projectId:"audiocontroller-670a5"};
 const GK="AIzaSyA8km_ZwkkRGVInQq3opWjoHJWOGW8DI2E",GF="13KGisCtqNCWuulbARBN0ufF3M-6UdC85";
 const IDS=[1,2,3,4,5],COL={1:'#ff6b81',2:'#00cec9',3:'#fdcb6e',4:'#a29bfe',5:'#74b9ff'};
 const NM=['Lobby','Main Hall','Conference A','Rooftop','Lounge'];
 const AX=['mp3','wav','ogg','flac','aac','m4a'];
-let db;
-function fmtT(s){if(!s||!isFinite(s))return'0:00';const m=Math.floor(s/60),ss=Math.floor(s%60);return m+':'+(ss<10?'0':'')+ss}
+const PRAYERS=['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+const DISPLAY_PRAYERS=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+const AR={Fajr:'الفجر',Sunrise:'الشروق',Dhuhr:'الظهر',Asr:'العصر',Maghrib:'المغرب',Isha:'العشاء'};
+const ICONS={Fajr:'◔',Sunrise:'☀',Dhuhr:'☼',Asr:'◑',Maghrib:'☾',Isha:'☽'};
+let db,prayerTimes={},prayerCfg={master:true,pre:1,post:5,enabled:{Fajr:true,Dhuhr:true,Asr:true,Maghrib:true,Isha:true}};
+let mutedByPrayer=false,muteTimer=null;
+
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function fmtT(s){if(!s||!isFinite(s))return'0:00';const m=Math.floor(s/60),ss=Math.floor(s%60);return m+':'+(ss<10?'0':'')+ss}
 function fbSet(p,v){db.ref(p).set(v)}
 function fbOn(p,cb){db.ref(p).on('value',s=>cb(s.val()))}
 
@@ -87,8 +164,131 @@ db.ref('_ping').set(Date.now()).then(()=>{
   document.getElementById('strips').style.display='flex';
   buildStrips();startListen();
   fbOn('sync/lastSync',ts=>{if(ts){const d=new Date(ts);document.getElementById('sync-time').textContent=`LAST: ${d.toLocaleDateString()} ${d.toLocaleTimeString()}`}});
+  loadPrayerCfg();fetchPrayers();
+  setInterval(checkPrayerEvents,30000);
+  setInterval(updateNextPrayer,10000);
 }).catch(e=>{document.getElementById('conn').textContent='✗ '+e.message});
 
+// ═══ PRAYER TIMES ═══
+async function fetchPrayers(){
+  const city=document.getElementById('emirate').value;
+  try{
+    const r=await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=United%20Arab%20Emirates&method=8`);
+    const d=await r.json();
+    if(d.code===200){
+      prayerTimes=d.data.timings;
+      buildPrayerGrid();updateNextPrayer();
+      // Save to Firebase so players can see
+      fbSet('prayer/times',prayerTimes);
+      fbSet('prayer/city',city);
+    }
+  }catch(e){console.error('Prayer fetch error:',e)}
+}
+
+function buildPrayerGrid(){
+  const g=document.getElementById('prayer-grid');g.innerHTML='';
+  DISPLAY_PRAYERS.forEach(p=>{
+    const t=prayerTimes[p]||'--:--';
+    const isMain=PRAYERS.includes(p);
+    const enabled=isMain?prayerCfg.enabled[p]:true;
+    const tile=document.createElement('div');
+    tile.className='prayer-tile'+(enabled?'':' disabled');
+    tile.innerHTML=`
+      <div class="pt-icon">${ICONS[p]||''}</div>
+      <div class="pt-name">${p.toUpperCase()}</div>
+      <div class="pt-name-ar">${AR[p]||''}</div>
+      <div class="pt-time">${t}</div>
+      ${isMain?`<div class="pt-toggle"><label class="switch"><input type="checkbox" ${enabled?'checked':''} onchange="togglePrayer('${p}',this.checked)"><span class="slider"></span></label></div>`:''}
+    `;
+    g.appendChild(tile);
+  });
+}
+
+function updateNextPrayer(){
+  const now=new Date();
+  let next=null,nextName='',nextTime='';
+  for(const p of PRAYERS){
+    if(!prayerCfg.enabled[p])continue;
+    const t=prayerTimes[p];if(!t)continue;
+    const[h,m]=t.split(':').map(Number);
+    const pt=new Date(now);pt.setHours(h,m,0,0);
+    if(pt>now&&(!next||pt<next)){next=pt;nextName=p;nextTime=t}
+  }
+  const ne=document.getElementById('next-name');
+  const nt=document.getElementById('next-time');
+  const nc=document.getElementById('next-cd');
+  const nb=document.getElementById('next-box');
+  if(mutedByPrayer){
+    nb.className='next-athan mute-active';
+    ne.textContent='🔇 PRAYER MUTE ACTIVE';ne.style.color='var(--rd)';
+    nt.textContent='';nc.textContent='Music muted for prayer';
+  }else if(next){
+    nb.className='next-athan';
+    ne.textContent=nextName+' · '+AR[nextName];ne.style.color='var(--am)';
+    nt.textContent=nextTime;
+    const diff=Math.floor((next-now)/1000);
+    const hh=Math.floor(diff/3600),mm=Math.floor((diff%3600)/60);
+    nc.textContent=`in ${hh}h ${mm}m`;
+  }else{
+    nb.className='next-athan';
+    ne.textContent='All prayers done';ne.style.color='var(--t3)';
+    nt.textContent='';nc.textContent='Resets at midnight';
+  }
+  // Save to Firebase
+  fbSet('prayer/next',{name:nextName,time:nextTime,muted:mutedByPrayer});
+}
+
+function checkPrayerEvents(){
+  if(!prayerCfg.master)return;
+  const now=new Date();
+  const pre=prayerCfg.pre||1;
+  const post=prayerCfg.post||5;
+  for(const p of PRAYERS){
+    if(!prayerCfg.enabled[p])continue;
+    const t=prayerTimes[p];if(!t)continue;
+    const[h,m]=t.split(':').map(Number);
+    const pt=new Date(now);pt.setHours(h,m,0,0);
+    const muteAt=new Date(pt.getTime()-pre*60000);
+    const unmuteAt=new Date(pt.getTime()+post*60000);
+    // Check if we're in the mute window
+    if(now>=muteAt&&now<unmuteAt&&!mutedByPrayer){
+      // MUTE ALL ZONES
+      mutedByPrayer=true;
+      console.log(`Prayer mute: ${p} at ${t}`);
+      IDS.forEach(id=>fbSet(`players/${id}/command`,{action:'mute',mute:true,ts:Date.now(),reason:'prayer'}));
+      fbSet('prayer/activeMute',{prayer:p,until:unmuteAt.toISOString()});
+      updateNextPrayer();
+      // Schedule unmute
+      const remaining=unmuteAt.getTime()-now.getTime();
+      if(muteTimer)clearTimeout(muteTimer);
+      muteTimer=setTimeout(()=>{
+        mutedByPrayer=false;
+        IDS.forEach(id=>fbSet(`players/${id}/command`,{action:'mute',mute:false,ts:Date.now(),reason:'prayer_end'}));
+        fbSet('prayer/activeMute',null);
+        updateNextPrayer();
+        console.log('Prayer unmute');
+      },remaining);
+    }
+  }
+}
+
+function togglePrayer(p,v){prayerCfg.enabled[p]=v;savePrayerCfg();buildPrayerGrid();updateNextPrayer()}
+function savePrayerCfg(){
+  prayerCfg.master=document.getElementById('prayer-master').checked;
+  prayerCfg.pre=parseInt(document.getElementById('pre-buf').value)||1;
+  prayerCfg.post=parseInt(document.getElementById('post-buf').value)||5;
+  localStorage.setItem('prayerCfg',JSON.stringify(prayerCfg));
+  fbSet('prayer/config',prayerCfg);
+}
+function loadPrayerCfg(){
+  const s=localStorage.getItem('prayerCfg');
+  if(s){try{prayerCfg=JSON.parse(s)}catch(e){}}
+  document.getElementById('prayer-master').checked=prayerCfg.master;
+  document.getElementById('pre-buf').value=prayerCfg.pre||1;
+  document.getElementById('post-buf').value=prayerCfg.post||5;
+}
+
+// ═══ DRIVE SYNC ═══
 async function syncDrive(){
   const b=document.getElementById('sync-badge');b.textContent='↻ SYNCING…';
   try{const r=await fetch(`https://www.googleapis.com/drive/v3/files?q='${GF}'+in+parents+and+trashed=false&key=${GK}&fields=files(id,name,size)&pageSize=500`);
@@ -96,9 +296,10 @@ async function syncDrive(){
     await fbSet('playlist',songs);await fbSet('sync/lastSync',Date.now());b.textContent=`✓ ${songs.length} SONGS`;setTimeout(()=>b.textContent='↻ SYNC DRIVE',3000);
   }catch(e){b.textContent='✗ FAILED';setTimeout(()=>b.textContent='↻ SYNC DRIVE',3000)}}
 
+// ═══ CHANNEL STRIPS ═══
 function buildStrips(){const c=document.getElementById('strips');c.innerHTML='';IDS.forEach(id=>{const col=COL[id];const s=document.createElement('div');s.className='ch';s.innerHTML=`<div class="ch-bar" style="background:${col}"></div><div class="ch-body"><div class="ch-top"><div class="ch-badge" style="background:${col}">${String(id).padStart(2,'0')}</div><div class="ch-meta"><div class="ch-name">${NM[id-1]}</div><div class="ch-st" id="ss-${id}"><span class="ch-dot"></span>OFFLINE</div></div><div class="ch-src" id="csrc-${id}"><button class="active" onclick="setSrc(${id},'local')">LOCAL</button><button onclick="setSrc(${id},'live')">LIVE</button></div></div><div class="ch-np" id="cnp-${id}" style="display:none"><div class="ch-song" id="csong-${id}"></div><div class="ch-detail" id="cdtl-${id}"></div><div class="ch-prog"><span class="ch-prog-time" id="cct-${id}">0:00</span><div class="ch-prog-bar"><div class="ch-prog-fill" id="cpf-${id}" style="background:${col}"></div></div><span class="ch-prog-time" id="cdt-${id}">0:00</span></div></div><div class="ch-ctrls"><button class="ch-cb b-prev" onclick="sendCmd(${id},'prev')">⏮</button><button class="ch-cb b-play" onclick="sendCmd(${id},'play')">▶</button><button class="ch-cb b-pause" onclick="sendCmd(${id},'pause')">⏸</button><button class="ch-cb b-stop" onclick="sendCmd(${id},'stop')">⏹</button><button class="ch-cb b-next" onclick="sendCmd(${id},'next')">⏭</button><button class="ch-cb b-mute" id="cmute-${id}" onclick="toggleMute(${id})">🔊</button></div><div class="ch-vol"><span class="vl2">VOL</span><input type="range" min="0" max="100" value="70" id="vol-${id}" oninput="sendVol(${id},this.value)"><span class="vv2" id="vv-${id}">70</span></div><p class="ch-err2" id="se-${id}" style="display:none"></p></div>`;c.appendChild(s)})}
 
-function startListen(){IDS.forEach(id=>{fbOn(`players/${id}/status`,st=>{if(!st)return;const el=document.getElementById(`ss-${id}`);const on=st&&(Date.now()-st.ts<8000);const s=st?.st||'offline';if(el){const dc=on?(s==='playing'||s==='live'?'var(--gn)':'var(--am)'):'var(--t3)';const glow=on&&(s==='playing'||s==='live')?'0 0 6px var(--gng)':'none';el.innerHTML=`<span class="ch-dot" style="background:${dc};box-shadow:${glow}"></span>${(on?(st.muted?'🔇 ':'')+s:'offline').toUpperCase()}`;el.style.color=on?(s==='playing'||s==='live'?'var(--gn)':'var(--t2)'):'var(--t3)'}const np=document.getElementById(`cnp-${id}`);if(st.fn&&on){np.style.display='block';document.getElementById(`csong-${id}`).textContent=st.fn.replace(/\.[^/.]+$/,'');document.getElementById(`cdtl-${id}`).textContent=st.src==='live'?'LIVE BROADCAST':`TRACK ${(st.idx||0)+1}/${st.total||0} · LOCAL`;document.getElementById(`cct-${id}`).textContent=fmtT(st.pos);document.getElementById(`cdt-${id}`).textContent=fmtT(st.dur);if(st.dur>0)document.getElementById(`cpf-${id}`).style.width=(st.pos/st.dur*100)+'%'}else np.style.display='none';const srcEl=document.getElementById(`csrc-${id}`);if(srcEl&&st.src){srcEl.children[0].classList.toggle('active',st.src==='local');srcEl.children[1].classList.toggle('active',st.src==='live')}const muteEl=document.getElementById(`cmute-${id}`);if(muteEl){muteEl.textContent=st.muted?'🔇':'🔊';muteEl.classList.toggle('muted',!!st.muted)}const se=document.getElementById(`se-${id}`);if(st.err&&st.err.length>0&&on){se.textContent=st.err;se.style.display='block'}else se.style.display='none'})})}
+function startListen(){IDS.forEach(id=>{fbOn(`players/${id}/status`,st=>{if(!st)return;const el=document.getElementById(`ss-${id}`);const on=st&&(Date.now()-st.ts<8000);const s=st?.st||'offline';if(el){const dc=on?(s==='playing'||s==='live'?'var(--gn)':'var(--am)'):'var(--t3)';const glow=on&&(s==='playing'||s==='live')?'0 0 6px var(--gng)':'none';el.innerHTML=`<span class="ch-dot" style="background:${dc};box-shadow:${glow}"></span>${(on?(st.muted?'🔇 ':'')+s:'offline').toUpperCase()}`;el.style.color=on?(s==='playing'||s==='live'?'var(--gn)':'var(--t2)'):'var(--t3)'}const np=document.getElementById(`cnp-${id}`);if(st.fn&&on){np.style.display='block';document.getElementById(`csong-${id}`).textContent=st.fn.replace(/\.[^/.]+$/,'');document.getElementById(`cdtl-${id}`).textContent=st.src==='live'?'LIVE':`TRACK ${(st.idx||0)+1}/${st.total||0} · LOCAL`;document.getElementById(`cct-${id}`).textContent=fmtT(st.pos);document.getElementById(`cdt-${id}`).textContent=fmtT(st.dur);if(st.dur>0)document.getElementById(`cpf-${id}`).style.width=(st.pos/st.dur*100)+'%'}else np.style.display='none';const srcEl=document.getElementById(`csrc-${id}`);if(srcEl&&st.src){srcEl.children[0].classList.toggle('active',st.src==='local');srcEl.children[1].classList.toggle('active',st.src==='live')}const muteEl=document.getElementById(`cmute-${id}`);if(muteEl){muteEl.textContent=st.muted?'🔇':'🔊';muteEl.classList.toggle('muted',!!st.muted)}const se=document.getElementById(`se-${id}`);if(st.err&&st.err.length>0&&on){se.textContent=st.err;se.style.display='block'}else se.style.display='none'})})}
 
 async function sendCmd(id,a){await fbSet(`players/${id}/command`,{action:a,ts:Date.now()})}
 async function sendVol(id,v){document.getElementById(`vv-${id}`).textContent=v;await fbSet(`players/${id}/command`,{action:'volume',volume:v/100,ts:Date.now()})}
