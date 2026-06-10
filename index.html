@@ -2,449 +2,254 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>ZoneAudio</title>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Inter',system-ui,sans-serif;background:#282c36;color:#fff;height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased}
+html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:#f0f2f5;color:#1a1d26;-webkit-font-smoothing:antialiased}
 input,select,button{font-family:inherit;outline:none}
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 
-.app{height:100vh;display:grid;grid-template-rows:auto auto 1fr auto;padding:0}
+/* ── Header ── */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:#fff;border-bottom:1px solid #e2e5ea;flex-shrink:0;flex-wrap:wrap;gap:4px}
+.hdr-l{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.hdr-logo{font-size:14px;font-weight:800;color:#1a1d26;letter-spacing:-.3px;white-space:nowrap}
+.hdr-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.4)}
+.hdr-lbl{font-size:9px;color:#94a3b8;font-weight:500}
+.hdr-r{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.hdr-time{font-size:10px;color:#94a3b8;font-weight:500;margin-right:4px}
+.hb{height:28px;padding:0 12px;border:1px solid #e2e5ea;border-radius:6px;font-size:9px;font-weight:600;cursor:pointer;color:#64748b;background:#fff;letter-spacing:.3px;transition:all .12s}
+.hb:active{background:#f1f5f9;transform:scale(.96)}
+.hb.acc{color:#3b82f6;background:#eff6ff;border-color:#bfdbfe}
 
-/* ── Top Status Bar ── */
-.status-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
-.sb-left{display:flex;align-items:center;gap:12px}
-.sb-logo{font-size:15px;font-weight:700;letter-spacing:-.3px;color:#fff}
-.sb-dot{width:6px;height:6px;border-radius:50%;background:#34d399}
-.sb-label{font-size:10px;color:rgba(255,255,255,.6);font-weight:500;letter-spacing:.5px}
-.sb-right{display:flex;align-items:center;gap:8px}
-.sb-time{font-size:13px;font-weight:600;color:rgba(255,255,255,.6)}
-.sb-btn{height:30px;padding:0 14px;border:none;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;color:rgba(255,255,255,.6);background:rgba(255,255,255,.15);transition:all .15s;letter-spacing:.3px}
-.sb-btn:active{background:rgba(255,255,255,.12);color:#fff;transform:scale(.96)}
-.sb-btn.accent{color:#60a5fa;background:rgba(96,165,250,.1)}
-
-/* ── Prayer Bar ── */
-.pray{display:flex;align-items:center;padding:8px 24px;gap:6px;background:rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12);overflow-x:auto}
-.pray-icon{font-size:16px;opacity:.6;margin-right:4px}
-.pray-tile{text-align:center;padding:5px 12px;border-radius:8px;min-width:54px;cursor:pointer;border:1px solid transparent;transition:all .12s}
-.pray-tile:active{background:rgba(255,255,255,.15)}
-.pray-tile.next{background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.12)}
-.pray-tile.off{opacity:.2}
-.pray-tile .pi{font-size:11px}.pray-tile .pn{font-size:7px;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.8px;margin:2px 0}.pray-tile .ptime{font-size:12px;font-weight:700;color:rgba(255,255,255,.85)}
-.pray-sep{width:1px;height:28px;background:rgba(255,255,255,.15);margin:0 2px}
-.pray-next{padding:0 14px;text-align:center}
-.pray-next .pnl{font-size:7px;font-weight:700;color:rgba(251,191,36,.6);letter-spacing:1.5px}
-.pray-next .pnn{font-size:14px;font-weight:700;color:#fbbf24}
-.pray-next .pnc{font-size:9px;color:rgba(255,255,255,.45)}
-.pray-r{display:flex;align-items:center;gap:6px;margin-left:auto}
-.pray-r .pcf{display:flex;align-items:center;gap:3px;font-size:8px;color:rgba(255,255,255,.4);font-weight:600}
-.pray-r input,.pray-r select{padding:3px 5px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.12);border-radius:4px;color:#fff;font-size:9px;width:34px}
-.pray-r select{width:auto}
-.sw{position:relative;width:36px;height:20px;cursor:pointer}
+/* ── Prayer ── */
+.pray{display:flex;align-items:center;padding:5px 16px;gap:4px;background:#fff;border-bottom:1px solid #e2e5ea;flex-shrink:0;overflow-x:auto;position:relative}
+.pray-locked::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.92);z-index:2;backdrop-filter:blur(2px)}
+.lic-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;gap:8px}
+.lic-overlay .lt{font-size:10px;color:#94a3b8;font-weight:600}.lic-overlay .lb2{padding:4px 12px;border:1px solid #bfdbfe;border-radius:5px;background:#eff6ff;color:#3b82f6;font-size:9px;font-weight:600;cursor:pointer}
+.pi2{font-size:14px;flex-shrink:0}
+.ptile{text-align:center;padding:3px 8px;border-radius:6px;min-width:44px;flex-shrink:0;cursor:pointer;border:1px solid transparent}
+.ptile:active{background:#f1f5f9}
+.ptile.next{background:#fefce8;border-color:#fde68a}
+.ptile.off{opacity:.25}
+.ptile .pn{font-size:6px;font-weight:700;color:#94a3b8;letter-spacing:.6px;margin:1px 0}
+.ptile .pt2{font-size:10px;font-weight:700;color:#334155}
+.psep{width:1px;height:22px;background:#e2e5ea;flex-shrink:0}
+.pnext{padding:0 8px;text-align:center;flex-shrink:0}
+.pnext .pnl{font-size:6px;font-weight:700;color:#d97706;letter-spacing:1.2px}
+.pnext .pnn{font-size:11px;font-weight:700;color:#d97706}
+.pnext .pnc{font-size:8px;color:#94a3b8}
+.pray-r{display:flex;align-items:center;gap:4px;margin-left:auto;flex-shrink:0}
+.pcf{display:flex;align-items:center;gap:2px;font-size:7px;color:#94a3b8;font-weight:600}
+.pcf input,.pcf select{padding:2px 4px;background:#f8fafc;border:1px solid #e2e5ea;border-radius:3px;color:#334155;font-size:8px;width:28px}
+.pcf select{width:auto}
+.sw{position:relative;width:30px;height:16px;cursor:pointer;flex-shrink:0}
 .sw input{opacity:0;width:0;height:0}
-.sw .sl{position:absolute;inset:0;background:rgba(255,255,255,.15);border-radius:10px;transition:.2s}
-.sw .sl::before{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;left:2px;top:2px;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.4)}
-.sw input:checked+.sl{background:#34d399}
-.sw input:checked+.sl::before{transform:translateX(16px)}
+.sw .sl{position:absolute;inset:0;background:#cbd5e1;border-radius:8px;transition:.2s}
+.sw .sl::before{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;left:2px;top:2px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.sw input:checked+.sl{background:#22c55e}
+.sw input:checked+.sl::before{transform:translateX(14px)}
+.lic-badge{font-size:7px;font-weight:700;padding:2px 8px;border-radius:8px;cursor:pointer;letter-spacing:.3px;flex-shrink:0}
+.lic-badge.valid{color:#16a34a;background:#f0fdf4;border:1px solid #bbf7d0}
+.lic-badge.none{color:#94a3b8;background:#f8fafc;border:1px solid #e2e5ea}
+.lic-badge.expired{color:#dc2626;background:#fef2f2;border:1px solid #fecaca}
 
-/* ── Zone Grid ── */
-.grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:12px;padding:16px 24px;min-height:0;overflow:hidden}
+/* ── Grid ── */
+.zgrid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;padding:10px 16px;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch}
 
-/* ── Zone Tile (Crestron style) ── */
-.tile{background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.15);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;transition:all .2s;position:relative}
-.tile.z1{border-color:rgba(248,113,113,.6);box-shadow:0 0 20px rgba(248,113,113,.25),0 0 40px rgba(248,113,113,.1),inset 0 0 20px rgba(248,113,113,.06)}
-.tile.z2{border-color:rgba(52,211,153,.6);box-shadow:0 0 20px rgba(52,211,153,.25),0 0 40px rgba(52,211,153,.1),inset 0 0 20px rgba(52,211,153,.06)}
-.tile.z3{border-color:rgba(251,191,36,.6);box-shadow:0 0 20px rgba(251,191,36,.25),0 0 40px rgba(251,191,36,.1),inset 0 0 20px rgba(251,191,36,.06)}
-.tile.z4{border-color:rgba(167,139,250,.6);box-shadow:0 0 20px rgba(167,139,250,.25),0 0 40px rgba(167,139,250,.1),inset 0 0 20px rgba(167,139,250,.06)}
-.tile.z5{border-color:rgba(96,165,250,.6);box-shadow:0 0 20px rgba(96,165,250,.25),0 0 40px rgba(96,165,250,.1),inset 0 0 20px rgba(96,165,250,.06)}
-.tile:active{background:rgba(255,255,255,.18)}
-.tile.z1:active{border-color:rgba(248,113,113,.85);box-shadow:0 0 30px rgba(248,113,113,.4),0 0 60px rgba(248,113,113,.15)}
-.tile.z2:active{border-color:rgba(52,211,153,.85);box-shadow:0 0 30px rgba(52,211,153,.4),0 0 60px rgba(52,211,153,.15)}
-.tile.z3:active{border-color:rgba(251,191,36,.85);box-shadow:0 0 30px rgba(251,191,36,.4),0 0 60px rgba(251,191,36,.15)}
-.tile.z4:active{border-color:rgba(167,139,250,.85);box-shadow:0 0 30px rgba(167,139,250,.4),0 0 60px rgba(167,139,250,.15)}
-.tile.z5:active{border-color:rgba(96,165,250,.85);box-shadow:0 0 30px rgba(96,165,250,.4),0 0 60px rgba(96,165,250,.15)}
-.tile-glow{position:absolute;top:0;left:0;right:0;height:2px;opacity:.6}
-.tile-body{padding:16px 18px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+/* ── Zone Card ── */
+.zc{background:#fff;border:1px solid #e2e5ea;border-radius:12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:box-shadow .15s;min-height:0}
+.zc:active{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.zc-bar{height:3px;flex-shrink:0}
+.zc-body{padding:10px 12px;flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-height:0;overflow:hidden}
 
-/* Tile header */
-.tile-hdr{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.tile-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0}
-.tile-info{flex:1;min-width:0}
-.tile-name{font-size:14px;font-weight:700;letter-spacing:-.2px}
-.tile-status{font-size:9px;font-weight:500;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:5px;margin-top:1px}
-.tile-dot{width:5px;height:5px;border-radius:50%}
-.tile-mode{display:flex;background:rgba(255,255,255,.12);border-radius:6px;padding:2px}
-.tile-mode button{padding:4px 10px;border:none;border-radius:4px;font-size:8px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.4);background:transparent;letter-spacing:.5px;transition:all .12s}
-.tile-mode button.on{background:rgba(255,255,255,.12);color:rgba(255,255,255,.7)}
+.zc-hdr{display:flex;align-items:center;gap:8px}
+.zc-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.zc-info{flex:1;min-width:0}
+.zc-name{font-size:13px;font-weight:700;color:#1e293b}
+.zc-stat{font-size:8px;font-weight:600;color:#94a3b8;display:flex;align-items:center;gap:3px}
+.zc-dot{width:5px;height:5px;border-radius:50%}
+.zc-mode{display:flex;background:#f1f5f9;border-radius:5px;padding:2px}
+.zc-mode button{padding:3px 8px;border:none;border-radius:3px;font-size:7px;font-weight:700;cursor:pointer;color:#94a3b8;background:transparent;letter-spacing:.5px}
+.zc-mode button.on{background:#fff;color:#3b82f6;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 
-/* Now playing */
-.tile-np{background:rgba(0,0,0,.2);border-radius:10px;padding:10px 12px;margin-bottom:8px}
-.tile-song{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,255,255,.85);margin-bottom:2px}
-.tile-track{font-size:8px;color:rgba(255,255,255,.4);font-weight:500;margin-bottom:6px;letter-spacing:.3px}
-.tile-bar{display:flex;align-items:center;gap:6px}
-.tile-bar-bg{flex:1;height:2px;background:rgba(255,255,255,.12);border-radius:1px;overflow:hidden}
-.tile-bar-fg{height:100%;border-radius:1px;transition:width 1s}
-.tile-bar-t{font-size:8px;color:rgba(255,255,255,.2);min-width:24px}
+.zc-np{background:#f8fafc;border-radius:8px;padding:7px 10px;border:1px solid #f1f5f9}
+.zc-song{font-size:11px;font-weight:600;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px}
+.zc-trk{font-size:7px;color:#94a3b8;margin-bottom:4px}
+.zc-bar2{display:flex;align-items:center;gap:4px}
+.zc-bar-bg{flex:1;height:3px;background:#e2e5ea;border-radius:2px;overflow:hidden}
+.zc-bar-fg{height:100%;border-radius:2px;transition:width .8s}
+.zc-bar-t{font-size:7px;color:#94a3b8;min-width:22px}
 
-/* Transport row */
-.tile-ctrl{display:flex;align-items:center;gap:4px}
-.tile-btns{display:flex;gap:3px;flex-shrink:0}
-.tb{width:34px;height:34px;border:none;border-radius:8px;font-size:14px;cursor:pointer;color:rgba(255,255,255,.4);background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;transition:all .12s}
-.tb:active{background:rgba(255,255,255,.15);color:#fff;transform:scale(.9)}
-.tb.play:active{color:#34d399}
-.tb.pause:active{color:#fbbf24}
-.tb.stop:active{color:#f87171}
-.tb.sk{font-size:10px}
-.tb.sk:active{color:#60a5fa}
-.tb.mt{font-size:11px}
-.tb.mt.muted{background:rgba(248,113,113,.1);color:#f87171}
+.zc-ctrl{display:flex;align-items:center;gap:6px}
+.zc-btns{display:flex;gap:3px;flex-shrink:0}
+.tb2{width:34px;height:34px;border:1px solid #e2e5ea;border-radius:8px;font-size:14px;cursor:pointer;color:#64748b;background:#fff;display:flex;align-items:center;justify-content:center;transition:all .1s}
+.tb2:active{transform:scale(.9);background:#f1f5f9}
+.tb2.play:active{color:#22c55e;border-color:#22c55e;background:#f0fdf4}
+.tb2.pause:active{color:#d97706;border-color:#d97706;background:#fffbeb}
+.tb2.stop:active{color:#ef4444;border-color:#ef4444;background:#fef2f2}
+.tb2.sk{font-size:10px}.tb2.sk:active{color:#3b82f6;border-color:#3b82f6}
+.tb2.mt{font-size:11px}.tb2.mt.muted{background:#fef2f2;color:#ef4444;border-color:#fca5a5}
+.zc-vol{flex:1;display:flex;align-items:center;gap:6px}
+.zc-vol input[type=range]{flex:1;height:4px;cursor:pointer;appearance:none;background:#e2e5ea;border-radius:2px}
+.zc-vol input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);border:2px solid #cbd5e1;cursor:pointer}
+.zc-vol .vn{font-size:11px;font-weight:700;color:#94a3b8;width:24px;text-align:right}
 
-/* Volume slider (Crestron style - large) */
-.tile-vol{flex:1;display:flex;align-items:center;gap:8px;margin-left:6px}
-.tile-vol input[type=range]{flex:1;height:6px;cursor:pointer;appearance:none;background:rgba(255,255,255,.12);border-radius:3px}
-.tile-vol input[type=range]::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.5);cursor:pointer}
-.tile-vol .vn{font-size:12px;font-weight:700;color:rgba(255,255,255,.4);width:28px;text-align:right}
+/* ── Footer ── */
+.foot{display:flex;align-items:center;justify-content:center;padding:4px 16px;gap:12px;background:#fff;border-top:1px solid #e2e5ea;flex-shrink:0}
+.foot-i{font-size:7px;color:#cbd5e1;letter-spacing:.8px;font-weight:500}
+.foot-s{font-size:7px;color:#94a3b8;margin-left:auto}
 
-/* ── Bottom Bar ── */
-.bottom{display:flex;align-items:center;justify-content:center;padding:8px 24px;background:rgba(255,255,255,.12);border-top:1px solid rgba(255,255,255,.12);gap:24px}
-.bottom-item{font-size:8px;color:rgba(255,255,255,.2);font-weight:500;letter-spacing:1px;display:flex;align-items:center;gap:4px}
-.bottom-item .bi{font-size:12px}
+/* ── License Modal ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.3);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:380px;padding:28px 24px;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal h2{font-size:16px;font-weight:700;text-align:center;color:#1e293b;margin-bottom:4px}
+.modal .msub{font-size:11px;color:#94a3b8;text-align:center;margin-bottom:20px}
+.modal textarea{width:100%;padding:10px;background:#f8fafc;border:1px solid #e2e5ea;border-radius:8px;color:#334155;font-size:11px;resize:none;height:64px}
+.modal textarea:focus{border-color:#93c5fd}
+.modal-btns{display:flex;gap:6px;margin-top:14px}
+.mb2{flex:1;padding:10px;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer}
+.mb2:active{transform:scale(.97)}
+.mb2.pri{background:#3b82f6;color:#fff}
+.mb2.gho{background:#f1f5f9;color:#64748b}
+.merr{color:#ef4444;font-size:10px;margin-top:6px}.mok{color:#22c55e;font-size:10px;margin-top:6px}
+.minfo{margin-top:12px;padding:10px;background:#f8fafc;border-radius:8px;border:1px solid #f1f5f9}
+.mrow{display:flex;justify-content:space-between;padding:3px 0;font-size:10px}
+.mrow .ml{color:#94a3b8}.mrow .mv{font-weight:600;color:#475569}.mrow .mv.ok{color:#22c55e}.mrow .mv.ex{color:#ef4444}
+.mrem{margin-top:10px;text-align:center}
+.mrem button{background:#fff;border:1px solid #fca5a5;color:#ef4444;font-size:9px;padding:4px 14px;border-radius:6px;cursor:pointer}
 
-.con{display:flex;align-items:center;justify-content:center;height:100vh;color:rgba(255,255,255,.45);font-size:13px;font-weight:500}
+.conn-s{display:flex;align-items:center;justify-content:center;height:100vh;color:#94a3b8;font-size:13px}
 
-/* ── License System ── */
-.pray-locked{position:relative}
-.pray-locked::after{content:'';position:absolute;inset:0;background:rgba(13,16,23,.85);border-radius:0;z-index:2;backdrop-filter:blur(4px)}
-.lic-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;gap:12px}
-.lic-overlay .lic-icon{font-size:20px}
-.lic-overlay .lic-text{font-size:11px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.5px}
-.lic-overlay .lic-btn{padding:6px 16px;border:1px solid rgba(96,165,250,.3);border-radius:6px;background:rgba(96,165,250,.1);color:#60a5fa;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:.5px}
-.lic-overlay .lic-btn:active{background:rgba(96,165,250,.2)}
-
-.lic-status{display:flex;align-items:center;gap:5px;font-size:8px;font-weight:600;letter-spacing:.5px;padding:3px 10px;border-radius:10px;cursor:pointer}
-.lic-status.valid{color:#34d399;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.15)}
-.lic-status.expired{color:#f87171;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.15)}
-.lic-status.none{color:rgba(255,255,255,.3);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
-
-/* License Modal */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
-.modal{background:#1a1f2a;border:1px solid rgba(255,255,255,.1);border-radius:20px;width:100%;max-width:440px;padding:32px;box-shadow:0 24px 80px rgba(0,0,0,.5)}
-.modal-title{font-size:18px;font-weight:700;margin-bottom:4px}
-.modal-sub{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:24px}
-.modal-field{margin-bottom:16px;text-align:left}
-.modal-field label{display:block;font-size:10px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:6px;letter-spacing:1px}
-.modal-field input,.modal-field textarea{width:100%;padding:12px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:13px;resize:none}
-.modal-field input:focus,.modal-field textarea:focus{border-color:rgba(96,165,250,.4)}
-.modal-actions{display:flex;gap:8px;margin-top:20px}
-.modal-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
-.modal-btn:active{transform:scale(.97)}
-.modal-btn.primary{background:linear-gradient(135deg,#4a9eff,#7c6ef0);color:#fff}
-.modal-btn.ghost{background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.08)}
-.modal-info{margin-top:16px;padding:12px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid rgba(255,255,255,.06)}
-.modal-info-row{display:flex;justify-content:space-between;padding:4px 0;font-size:11px}
-.modal-info-row .lbl{color:rgba(255,255,255,.35)}.modal-info-row .val{font-weight:600;color:rgba(255,255,255,.7)}
-.modal-info-row .val.ok{color:#34d399}.modal-info-row .val.exp{color:#f87171}
-.modal-err{color:#f87171;font-size:11px;margin-top:8px;font-weight:500}
-.modal-ok{color:#34d399;font-size:11px;margin-top:8px;font-weight:500}
-
-@media(max-width:900px){.grid{grid-template-columns:1fr 1fr;overflow-y:auto}}
-@media(max-width:500px){.grid{grid-template-columns:1fr}}
+@media(max-width:820px){
+  html,body{overflow:auto}
+  .app{height:auto;min-height:100vh;min-height:100dvh;overflow:visible}
+  .zgrid{grid-template-columns:1fr;grid-template-rows:none;overflow:visible;flex:none;gap:8px;padding:8px 12px}
+  .hdr{padding:6px 10px}.pray{padding:4px 10px}
+  .tb2{width:32px;height:32px;font-size:13px}
+}
+@media(max-width:500px){.pray-r .pcf{display:none}}
 </style>
 </head>
 <body>
-<div id="con" class="con">Connecting…</div>
+<div id="conn" class="conn-s">Connecting…</div>
 <div class="app" id="app" style="display:none">
 
-  <div class="status-bar">
-    <div class="sb-left">
-      <span class="sb-logo">ZoneAudio</span>
-      <span class="sb-dot"></span>
-      <span class="sb-label" id="st2">CONNECTED</span>
-    </div>
-    <div class="sb-right">
-      <span class="sb-time" id="clock"></span>
-      <button class="sb-btn accent" id="sb" onclick="syncDrive()">↻ Sync</button>
-      <button class="sb-btn" onclick="masterCmd('play')">▶ All Play</button>
-      <button class="sb-btn" onclick="masterCmd('pause')">⏸ All Pause</button>
-      <button class="sb-btn" onclick="masterCmd('stop')">⏹ All Stop</button>
+  <div class="hdr">
+    <div class="hdr-l"><span class="hdr-logo">ZoneAudio</span><span class="hdr-dot"></span><span class="hdr-lbl" id="st2"></span></div>
+    <div class="hdr-r">
+      <span class="hdr-time" id="clock"></span>
+      <button class="hb acc" id="sbtn" onclick="syncDrive()">↻ Sync</button>
+      <button class="hb" onclick="masterCmd('play')">▶ All Play</button>
+      <button class="hb" onclick="masterCmd('pause')">⏸ Pause</button>
+      <button class="hb" onclick="masterCmd('stop')">⏹ Stop</button>
     </div>
   </div>
 
   <div class="pray" id="pray-bar">
-    <span class="pray-icon">🕌</span>
-    <div id="ptiles" style="display:flex;gap:3px"></div>
-    <div class="pray-sep"></div>
-    <div class="pray-next"><span class="pnl">NEXT</span><div class="pnn" id="pn">—</div><div class="pnc" id="pc2"></div></div>
-    <div class="pray-sep"></div>
+    <span class="pi2">🕌</span>
+    <div id="ptiles" style="display:flex;gap:2px"></div>
+    <div class="psep"></div>
+    <div class="pnext"><span class="pnl">NEXT</span><div class="pnn" id="pn">—</div><div class="pnc" id="pc2"></div></div>
+    <div class="psep"></div>
     <div class="pray-r">
       <div class="pcf">PRE<input type="number" id="pre" value="1" min="0" max="10" onchange="savePC()"></div>
       <div class="pcf">POST<input type="number" id="post" value="5" min="0" max="30" onchange="savePC()"></div>
-      <div class="pcf"><select id="emir" onchange="fetchP()"><option>Dubai</option><option>Abu Dhabi</option><option>Sharjah</option></select></div>
+      <div class="pcf"><select id="emir" onchange="fetchP()"><option>Dubai</option><option>Abu Dhabi</option><option>Sharjah</option><option>Ajman</option><option>Ras Al Khaimah</option><option>Fujairah</option></select></div>
       <label class="sw"><input type="checkbox" id="pm" checked onchange="savePC()"><span class="sl"></span></label>
-      <div class="lic-status none" id="lic-badge" onclick="showLicModal()">🔒 NO LICENSE</div>
+      <div class="lic-badge none" id="lic-badge" onclick="showLM()">🔒 LICENSE</div>
     </div>
-    <!-- Lock overlay when no license -->
-    <div class="lic-overlay" id="lic-lock">
-      <span class="lic-icon">🔒</span>
-      <span class="lic-text">PRAYER PLUGIN REQUIRES LICENSE</span>
-      <button class="lic-btn" onclick="showLicModal()">ACTIVATE</button>
-    </div>
+    <div class="lic-overlay" id="lic-lock"><span style="font-size:14px">🔒</span><span class="lt">PRAYER REQUIRES LICENSE</span><button class="lb2" onclick="showLM()">ACTIVATE</button></div>
   </div>
 
-  <!-- LICENSE MODAL -->
-  <div class="modal-bg" id="lic-modal" style="display:none" onclick="if(event.target===this)hideLicModal()">
-    <div class="modal">
-      <div style="text-align:center">
-        <div style="font-size:32px;margin-bottom:8px">🕌</div>
-        <div class="modal-title">Prayer Plugin License</div>
-        <div class="modal-sub">Enter your yearly license key to activate prayer auto-mute</div>
-      </div>
-      <div class="modal-field">
-        <label>LICENSE KEY</label>
-        <textarea id="lic-input" rows="3" placeholder="ZAPR-xxxxxxxx-xxxxxxxx-xxxxxxxx..."></textarea>
-      </div>
-      <div class="modal-actions">
-        <button class="modal-btn ghost" onclick="hideLicModal()">Cancel</button>
-        <button class="modal-btn primary" onclick="activateLic()">Activate License</button>
-      </div>
-      <p id="lic-err" class="modal-err" style="display:none"></p>
-      <p id="lic-ok" class="modal-ok" style="display:none"></p>
-      <div class="modal-info" id="lic-info" style="display:none">
-        <div class="modal-info-row"><span class="lbl">Customer</span><span class="val" id="li-cust"></span></div>
-        <div class="modal-info-row"><span class="lbl">Product</span><span class="val" id="li-prod"></span></div>
-        <div class="modal-info-row"><span class="lbl">Issued</span><span class="val" id="li-issued"></span></div>
-        <div class="modal-info-row"><span class="lbl">Expires</span><span class="val" id="li-expires"></span></div>
-        <div class="modal-info-row"><span class="lbl">Status</span><span class="val" id="li-status"></span></div>
-      </div>
-      <div style="text-align:center;margin-top:16px">
-        <button class="modal-btn ghost" id="lic-remove-btn" style="display:none;width:auto;padding:8px 20px;font-size:10px;color:#f87171" onclick="removeLic()">Remove License</button>
-      </div>
-    </div>
+  <div class="zgrid" id="zgrid"></div>
+
+  <div class="foot">
+    <span class="foot-i">📂 LOCAL</span><span class="foot-i">☁️ DRIVE</span><span class="foot-i">🕌 PRAYER</span><span class="foot-i">📡 LIVE</span>
+    <span class="foot-s" id="sync-t"></span>
   </div>
+</div>
 
-  <div class="grid" id="grid"></div>
-
-  <div class="bottom">
-    <div class="bottom-item"><span class="bi">📂</span>LOCAL PLAYBACK</div>
-    <div class="bottom-item"><span class="bi">☁️</span>GOOGLE DRIVE</div>
-    <div class="bottom-item"><span class="bi">🕌</span>PRAYER MUTE</div>
-    <div class="bottom-item"><span class="bi">📡</span>WEBRTC LIVE</div>
-    <div class="bottom-item" id="sync-t" style="margin-left:auto"></div>
+<div class="modal-bg" id="lic-modal" style="display:none" onclick="if(event.target===this)hideLM()">
+  <div class="modal">
+    <div style="font-size:24px;text-align:center;margin-bottom:6px">🕌</div>
+    <h2>Prayer License</h2>
+    <p class="msub">Enter yearly license key to activate</p>
+    <textarea id="lic-input" placeholder="ZAPR-xxxxxxxx-xxxxxxxx-..."></textarea>
+    <div class="modal-btns"><button class="mb2 gho" onclick="hideLM()">Cancel</button><button class="mb2 pri" onclick="actLic()">Activate</button></div>
+    <p id="lic-err" class="merr" style="display:none"></p>
+    <p id="lic-ok" class="mok" style="display:none"></p>
+    <div class="minfo" id="lic-info" style="display:none">
+      <div class="mrow"><span class="ml">Customer</span><span class="mv" id="li-c"></span></div>
+      <div class="mrow"><span class="ml">Issued</span><span class="mv" id="li-i"></span></div>
+      <div class="mrow"><span class="ml">Expires</span><span class="mv" id="li-e"></span></div>
+      <div class="mrow"><span class="ml">Status</span><span class="mv" id="li-s"></span></div>
+    </div>
+    <div class="mrem" id="lic-rem" style="display:none"><button onclick="remLic()">Remove License</button></div>
   </div>
 </div>
 
 <script>
 const FB={apiKey:"AIzaSyDgxVnFlhE5UtQws74QDdwsU2FFs9sxCVA",databaseURL:"https://audiocontroller-670a5-default-rtdb.firebaseio.com",projectId:"audiocontroller-670a5"};
 const GK="AIzaSyA8km_ZwkkRGVInQq3opWjoHJWOGW8DI2E",GF="13KGisCtqNCWuulbARBN0ufF3M-6UdC85";
-const IDS=[1,2,3,4,5],COL={1:'#f87171',2:'#34d399',3:'#fbbf24',4:'#a78bfa',5:'#60a5fa'};
-const NM=['Lobby','Main Hall','Conference A','Rooftop','Lounge'];
+const IDS=[1,2,3,4],COL={1:'#ef4444',2:'#22c55e',3:'#eab308',4:'#8b5cf6'};
+const NM=['Lobby','Main Hall','Conference A','Rooftop'];
 const AX=['mp3','wav','ogg','flac','aac','m4a'];
 const PRS=['Fajr','Dhuhr','Asr','Maghrib','Isha'],DSP=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
 const IC={Fajr:'🌅',Sunrise:'☀️',Dhuhr:'🌤',Asr:'⛅',Maghrib:'🌇',Isha:'🌙'};
 let db,pt={},cfg={master:true,pre:1,post:5,en:{Fajr:1,Dhuhr:1,Asr:1,Maghrib:1,Isha:1}},muted=false,mT=null;
-let licValid=false,licData=null;
-const LIC_SECRET="ZoneAudio-Prayer-2026-SecretKey-CHANGE-THIS";
-
+let licOK=false;const LS="ZoneAudio-Prayer-2026-SecretKey-CHANGE-THIS";
 function fT(s){if(!s||!isFinite(s))return'0:00';const m=Math.floor(s/60),ss=Math.floor(s%60);return m+':'+(ss<10?'0':'')+ss}
+setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})},1000);
 
-// ═══ LICENSE SYSTEM ═══
-async function hmacSHA256(key,msg){const k=new TextEncoder().encode(key);const m=new TextEncoder().encode(msg);const ck=await crypto.subtle.importKey('raw',k,{name:'HMAC',hash:'SHA-256'},false,['sign']);const sig=await crypto.subtle.sign('HMAC',ck,m);return Array.from(new Uint8Array(sig)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+// LICENSE
+async function hm(k,m){const ck=await crypto.subtle.importKey('raw',new TextEncoder().encode(k),{name:'HMAC',hash:'SHA-256'},false,['sign']);const s=await crypto.subtle.sign('HMAC',ck,new TextEncoder().encode(m));return Array.from(new Uint8Array(s)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+async function vLic(key){try{let c=key.trim();if(c.startsWith('ZAPR-'))c=c.substring(5);c=c.replace(/-/g,'');const d=JSON.parse(atob(c));if(!d.product||!d.customer||!d.expires||!d.signature)return{ok:0,err:'Invalid format'};if(d.product!=='ZoneAudio-Prayer')return{ok:0,err:'Wrong product'};const msg=`${d.product}|${d.customer}|${d.issued}|${d.expires}|${d.maxDevices||10}`;const exp=await hm(LS,msg);if(exp!==d.signature)return{ok:0,err:'Invalid key'};const ex=new Date(d.expires+'T23:59:59');if(new Date()>ex)return{ok:0,err:'Expired',data:d,expired:1};return{ok:1,data:d,days:Math.ceil((ex-new Date())/864e5)}}catch(e){return{ok:0,err:'Bad key'}}}
+async function chkLic(){const s=localStorage.getItem('za_lic');if(!s){sLic(0);return}const r=await vLic(s);if(r.ok){sLic(1,r)}else sLic(0,r)}
+function sLic(ok,r){licOK=ok;const bar=document.getElementById('pray-bar'),lock=document.getElementById('lic-lock'),badge=document.getElementById('lic-badge');if(ok){bar.classList.remove('pray-locked');lock.style.display='none';badge.className='lic-badge valid';badge.textContent=`✓ ${r.days}d`}else{bar.classList.add('pray-locked');lock.style.display='flex';badge.className=r&&r.expired?'lic-badge expired':'lic-badge none';badge.textContent=r&&r.expired?'✗ EXPIRED':'🔒 LICENSE'}}
+function showLM(){document.getElementById('lic-modal').style.display='flex';document.getElementById('lic-err').style.display='none';document.getElementById('lic-ok').style.display='none';const s=localStorage.getItem('za_lic');if(s){document.getElementById('lic-input').value=s;shLI()}}
+function hideLM(){document.getElementById('lic-modal').style.display='none'}
+async function actLic(){const k=document.getElementById('lic-input').value.trim(),err=document.getElementById('lic-err'),ok=document.getElementById('lic-ok');err.style.display='none';ok.style.display='none';if(!k){err.textContent='Enter a key';err.style.display='block';return}const r=await vLic(k);if(r.ok){localStorage.setItem('za_lic',k);ok.textContent=`✓ Activated! ${r.days} days left`;ok.style.display='block';sLic(1,r);shLD(r.data,r.days,1);fetchP()}else{err.textContent=r.err;err.style.display='block';if(r.data)shLD(r.data,0,0)}}
+async function shLI(){const k=document.getElementById('lic-input').value.trim();if(!k)return;const r=await vLic(k);if(r.data)shLD(r.data,r.days||0,r.ok)}
+function shLD(d,days,ok){document.getElementById('lic-info').style.display='block';document.getElementById('li-c').textContent=d.customer;document.getElementById('li-i').textContent=d.issued;document.getElementById('li-e').textContent=d.expires;const s=document.getElementById('li-s');s.textContent=ok?`ACTIVE · ${days}d`:'EXPIRED';s.className=ok?'mv ok':'mv ex';document.getElementById('lic-rem').style.display=ok?'block':'none'}
+function remLic(){localStorage.removeItem('za_lic');sLic(0);document.getElementById('lic-info').style.display='none';document.getElementById('lic-input').value='';document.getElementById('lic-rem').style.display='none';document.getElementById('lic-err').textContent='Removed';document.getElementById('lic-err').style.display='block'}
 
-async function validateLicense(keyStr){
-  try{
-    // Remove prefix and dashes, decode base64
-    let clean=keyStr.trim();
-    if(clean.startsWith('ZAPR-'))clean=clean.substring(5);
-    clean=clean.replace(/-/g,'');
-    const json=atob(clean);
-    const data=JSON.parse(json);
-
-    // Verify required fields
-    if(!data.product||!data.customer||!data.issued||!data.expires||!data.signature)
-      return{valid:false,error:'Invalid license format'};
-    if(data.product!=='ZoneAudio-Prayer')
-      return{valid:false,error:'Wrong product'};
-
-    // Verify HMAC signature
-    const msg=`${data.product}|${data.customer}|${data.issued}|${data.expires}|${data.maxDevices||10}`;
-    const expected=await hmacSHA256(LIC_SECRET,msg);
-    if(expected!==data.signature)
-      return{valid:false,error:'Invalid license key'};
-
-    // Check expiry
-    const exp=new Date(data.expires+'T23:59:59');
-    const now=new Date();
-    if(now>exp)
-      return{valid:false,error:'License expired on '+data.expires,data,expired:true};
-
-    // Calculate days remaining
-    const daysLeft=Math.ceil((exp-now)/(1000*60*60*24));
-    return{valid:true,data,daysLeft};
-  }catch(e){
-    return{valid:false,error:'Invalid license key: '+e.message};
-  }
-}
-
-async function checkStoredLicense(){
-  const stored=localStorage.getItem('za_prayer_lic');
-  if(!stored){setLicState(false,null);return}
-  const result=await validateLicense(stored);
-  if(result.valid){setLicState(true,result);licData=result}
-  else{setLicState(false,result)}
-}
-
-function setLicState(valid,result){
-  licValid=valid;
-  const bar=document.getElementById('pray-bar');
-  const lock=document.getElementById('lic-lock');
-  const badge=document.getElementById('lic-badge');
-
-  if(valid){
-    bar.classList.remove('pray-locked');
-    lock.style.display='none';
-    badge.className='lic-status valid';
-    badge.textContent=`✓ LICENSED · ${result.daysLeft}d left`;
-  }else{
-    bar.classList.add('pray-locked');
-    lock.style.display='flex';
-    if(result&&result.expired){
-      badge.className='lic-status expired';
-      badge.textContent='✗ EXPIRED';
-    }else{
-      badge.className='lic-status none';
-      badge.textContent='🔒 NO LICENSE';
-    }
-  }
-}
-
-function showLicModal(){
-  document.getElementById('lic-modal').style.display='flex';
-  document.getElementById('lic-err').style.display='none';
-  document.getElementById('lic-ok').style.display='none';
-  // Show existing license info if available
-  const stored=localStorage.getItem('za_prayer_lic');
-  if(stored){
-    document.getElementById('lic-input').value=stored;
-    showLicInfo();
-  }
-}
-function hideLicModal(){document.getElementById('lic-modal').style.display='none'}
-
-async function activateLic(){
-  const key=document.getElementById('lic-input').value.trim();
-  const err=document.getElementById('lic-err'),ok=document.getElementById('lic-ok');
-  err.style.display='none';ok.style.display='none';
-  if(!key){err.textContent='Please enter a license key';err.style.display='block';return}
-
-  const result=await validateLicense(key);
-  if(result.valid){
-    localStorage.setItem('za_prayer_lic',key);
-    ok.textContent=`✓ License activated! ${result.daysLeft} days remaining`;
-    ok.style.display='block';
-    setLicState(true,result);licData=result;
-    showLicInfoData(result.data,result.daysLeft,true);
-    // Enable prayer features
-    fetchP();
-  }else{
-    err.textContent=result.error;err.style.display='block';
-    if(result.data)showLicInfoData(result.data,0,false);
-  }
-}
-
-async function showLicInfo(){
-  const key=document.getElementById('lic-input').value.trim();
-  if(!key)return;
-  const result=await validateLicense(key);
-  if(result.data)showLicInfoData(result.data,result.daysLeft||0,result.valid);
-}
-
-function showLicInfoData(data,daysLeft,valid){
-  document.getElementById('lic-info').style.display='block';
-  document.getElementById('li-cust').textContent=data.customer;
-  document.getElementById('li-prod').textContent=data.product;
-  document.getElementById('li-issued').textContent=data.issued;
-  document.getElementById('li-expires').textContent=data.expires;
-  const st=document.getElementById('li-status');
-  if(valid){st.textContent=`ACTIVE · ${daysLeft} days`;st.className='val ok'}
-  else{st.textContent='EXPIRED';st.className='val exp'}
-  document.getElementById('lic-remove-btn').style.display=valid?'inline-block':'none';
-}
-
-function removeLic(){
-  localStorage.removeItem('za_prayer_lic');
-  setLicState(false,null);licData=null;
-  document.getElementById('lic-info').style.display='none';
-  document.getElementById('lic-input').value='';
-  document.getElementById('lic-ok').style.display='none';
-  document.getElementById('lic-remove-btn').style.display='none';
-  const err=document.getElementById('lic-err');
-  err.textContent='License removed';err.style.display='block';
-}
-
-// Clock
-setInterval(()=>{const n=new Date();document.getElementById('clock').textContent=n.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})},1000);
-
+// FIREBASE
 firebase.initializeApp(FB);db=firebase.database();
 db.ref('_ping').set(Date.now()).then(()=>{
-  document.getElementById('con').style.display='none';document.getElementById('app').style.display='grid';
-  buildGrid();listen();loadPC();checkStoredLicense().then(()=>{if(licValid)fetchP()});
-  db.ref('sync/lastSync').on('value',s=>{const v=s.val();if(v){const d=new Date(v);document.getElementById('sync-t').textContent='LAST SYNC: '+d.toLocaleTimeString()}});
-  setInterval(()=>{if(licValid)chkP()},15000);setInterval(()=>{if(licValid)updN()},5000);
-}).catch(e=>{document.getElementById('con').textContent='Connection failed'});
+  document.getElementById('conn').style.display='none';document.getElementById('app').style.display='flex';
+  buildGrid();listen();loadPC();chkLic().then(()=>{if(licOK)fetchP()});
+  db.ref('sync/lastSync').on('value',s=>{const v=s.val();if(v)document.getElementById('sync-t').textContent='Sync: '+new Date(v).toLocaleTimeString()});
+  setInterval(()=>{if(licOK)chkP()},15000);setInterval(()=>{if(licOK)updN()},5000);
+}).catch(e=>{document.getElementById('conn').textContent='✗ '+e.message});
 
 // PRAYER
 async function fetchP(){try{const r=await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${document.getElementById('emir').value}&country=United%20Arab%20Emirates&method=8`);const d=await r.json();if(d.code===200){pt=d.data.timings;bldPT();updN();db.ref('prayer/times').set(pt)}}catch(e){}}
-function bldPT(){const c=document.getElementById('ptiles');c.innerHTML='';DSP.forEach(p=>{const t=pt[p]||'--:--';const isM=PRS.includes(p);const en=isM?cfg.en[p]:1;const d=document.createElement('div');d.className='pray-tile'+(en?'':' off');d.id='p-'+p;d.innerHTML=`<div class="pi">${IC[p]}</div><div class="pn">${p.toUpperCase()}</div><div class="ptime">${t}</div>`;if(isM)d.onclick=()=>{cfg.en[p]=cfg.en[p]?0:1;savePC();bldPT();updN()};c.appendChild(d)})}
-function updN(){const now=new Date();let nx=null,nn='',nt='';for(const p of PRS){if(!cfg.en[p])continue;const t=pt[p];if(!t)continue;const[h,m]=t.split(':').map(Number);const d=new Date(now);d.setHours(h,m,0,0);if(d>now&&(!nx||d<nx)){nx=d;nn=p;nt=t}}DSP.forEach(p=>{const el=document.getElementById('p-'+p);if(el)el.classList.toggle('next',p===nn)});const ne=document.getElementById('pn'),nc=document.getElementById('pc2');if(muted){ne.textContent='🔇 MUTED';ne.style.color='#f87171';nc.textContent='Prayer active'}else if(nx){ne.textContent=nn;ne.style.color='#fbbf24';const df=Math.floor((nx-now)/1000);nc.textContent=`in ${Math.floor(df/3600)}h ${Math.floor((df%3600)/60)}m`}else{ne.textContent='—';ne.style.color='rgba(255,255,255,.2)';nc.textContent=''}}
+function bldPT(){const c=document.getElementById('ptiles');c.innerHTML='';DSP.forEach(p=>{const t=pt[p]||'--:--';const isM=PRS.includes(p);const en=isM?cfg.en[p]:1;const d=document.createElement('div');d.className='ptile'+(en?'':' off');d.id='tp-'+p;d.innerHTML=`<div class="pn">${IC[p]} ${p.toUpperCase()}</div><div class="pt2">${t}</div>`;if(isM)d.onclick=()=>{cfg.en[p]=cfg.en[p]?0:1;savePC();bldPT();updN()};c.appendChild(d)})}
+function updN(){const now=new Date();let nx=null,nn='',nt='';for(const p of PRS){if(!cfg.en[p])continue;const t=pt[p];if(!t)continue;const[h,m]=t.split(':').map(Number);const d=new Date(now);d.setHours(h,m,0,0);if(d>now&&(!nx||d<nx)){nx=d;nn=p;nt=t}}DSP.forEach(p=>{const el=document.getElementById('tp-'+p);if(el)el.classList.toggle('next',p===nn)});const ne=document.getElementById('pn'),nc=document.getElementById('pc2');if(muted){ne.textContent='🔇 MUTED';ne.style.color='#ef4444';nc.textContent='Prayer'}else if(nx){ne.textContent=nn;ne.style.color='#d97706';const df=Math.floor((nx-now)/1000);nc.textContent=`${Math.floor(df/3600)}h ${Math.floor((df%3600)/60)}m`}else{ne.textContent='—';ne.style.color='#94a3b8';nc.textContent=''}}
 function chkP(){if(!cfg.master)return;const now=new Date();for(const p of PRS){if(!cfg.en[p])continue;const t=pt[p];if(!t)continue;const[h,m]=t.split(':').map(Number);const pd=new Date(now);pd.setHours(h,m,0,0);const mAt=new Date(pd.getTime()-(cfg.pre||1)*60000),uAt=new Date(pd.getTime()+(cfg.post||5)*60000);if(now>=mAt&&now<uAt&&!muted){muted=true;IDS.forEach(id=>db.ref(`players/${id}/command`).set({action:'mute',mute:true,ts:Date.now()}));updN();if(mT)clearTimeout(mT);mT=setTimeout(()=>{muted=false;IDS.forEach(id=>db.ref(`players/${id}/command`).set({action:'mute',mute:false,ts:Date.now()}));updN()},uAt-now)}}}
-function savePC(){cfg.master=document.getElementById('pm').checked;cfg.pre=parseInt(document.getElementById('pre').value)||1;cfg.post=parseInt(document.getElementById('post').value)||5;localStorage.setItem('pc4',JSON.stringify(cfg));db.ref('prayer/config').set(cfg)}
-function loadPC(){const s=localStorage.getItem('pc4');if(s)try{cfg=JSON.parse(s)}catch(e){}document.getElementById('pm').checked=cfg.master;document.getElementById('pre').value=cfg.pre||1;document.getElementById('post').value=cfg.post||5}
+function savePC(){cfg.master=document.getElementById('pm').checked;cfg.pre=parseInt(document.getElementById('pre').value)||1;cfg.post=parseInt(document.getElementById('post').value)||5;localStorage.setItem('pc6',JSON.stringify(cfg));db.ref('prayer/config').set(cfg)}
+function loadPC(){const s=localStorage.getItem('pc6');if(s)try{cfg=JSON.parse(s)}catch(e){}document.getElementById('pm').checked=cfg.master;document.getElementById('pre').value=cfg.pre||1;document.getElementById('post').value=cfg.post||5}
 
 // SYNC
-async function syncDrive(){const b=document.getElementById('sb');b.textContent='↻…';try{const r=await fetch(`https://www.googleapis.com/drive/v3/files?q='${GF}'+in+parents+and+trashed=false&key=${GK}&fields=files(id,name,size)&pageSize=500`);const d=await r.json();const sg=(d.files||[]).filter(f=>AX.includes((f.name.split('.').pop()||'').toLowerCase())).sort((a,c)=>a.name.localeCompare(c.name)).map((f,i)=>({id:f.id,name:f.name,size:parseInt(f.size)||0,index:i}));db.ref('playlist').set(sg);db.ref('sync/lastSync').set(Date.now());b.textContent=`✓ ${sg.length}`;setTimeout(()=>b.textContent='↻ Sync',2000)}catch(e){b.textContent='✗';setTimeout(()=>b.textContent='↻ Sync',2000)}}
+async function syncDrive(){const b=document.getElementById('sbtn');b.textContent='↻…';try{const r=await fetch(`https://www.googleapis.com/drive/v3/files?q='${GF}'+in+parents+and+trashed=false&key=${GK}&fields=files(id,name,size)&pageSize=500`);const d=await r.json();const sg=(d.files||[]).filter(f=>AX.includes((f.name.split('.').pop()||'').toLowerCase())).sort((a,c)=>a.name.localeCompare(c.name)).map((f,i)=>({id:f.id,name:f.name,size:parseInt(f.size)||0,index:i}));db.ref('playlist').set(sg);db.ref('sync/lastSync').set(Date.now());b.textContent=`✓ ${sg.length}`;setTimeout(()=>b.textContent='↻ Sync',2000)}catch(e){b.textContent='✗';setTimeout(()=>b.textContent='↻ Sync',2000)}}
 
 // ZONES
-function buildGrid(){const g=document.getElementById('grid');g.innerHTML='';
-IDS.forEach(id=>{const c=COL[id];const t=document.createElement('div');t.className='tile z'+id;t.innerHTML=`
-<div class="tile-glow" style="background:linear-gradient(90deg,transparent,${c},transparent)"></div>
-<div class="tile-body">
-  <div class="tile-hdr">
-    <div class="tile-ico" style="background:${c}">${String(id).padStart(2,'0')}</div>
-    <div class="tile-info"><div class="tile-name">${NM[id-1]}</div><div class="tile-status" id="ss-${id}"><span class="tile-dot" style="background:rgba(255,255,255,.15)"></span>OFFLINE</div></div>
-    <div class="tile-mode" id="cm-${id}"><button class="on" onclick="setSrc(${id},'local')">LOCAL</button><button onclick="setSrc(${id},'live')">LIVE</button></div>
-  </div>
-  <div class="tile-np" id="np-${id}" style="display:none">
-    <div class="tile-song" id="sn-${id}"></div>
-    <div class="tile-track" id="tr-${id}"></div>
-    <div class="tile-bar"><span class="tile-bar-t" id="ct-${id}">0:00</span><div class="tile-bar-bg"><div class="tile-bar-fg" id="pf-${id}" style="background:${c}"></div></div><span class="tile-bar-t" id="dt-${id}">0:00</span></div>
-  </div>
-  <div class="tile-ctrl">
-    <div class="tile-btns">
-      <button class="tb sk" onclick="sendCmd(${id},'prev')">⏮</button>
-      <button class="tb play" onclick="sendCmd(${id},'play')">▶</button>
-      <button class="tb pause" onclick="sendCmd(${id},'pause')">⏸</button>
-      <button class="tb stop" onclick="sendCmd(${id},'stop')">⏹</button>
-      <button class="tb sk" onclick="sendCmd(${id},'next')">⏭</button>
-      <button class="tb mt" id="mu-${id}" onclick="togM(${id})">🔊</button>
-    </div>
-    <div class="tile-vol"><input type="range" min="0" max="100" value="70" id="vl-${id}" oninput="sendVol(${id},this.value)"><span class="vn" id="vv-${id}">70</span></div>
-  </div>
-</div>`;g.appendChild(t)});
-// 6th slot: empty with branding
-const e=document.createElement('div');e.className='tile';e.style.display='flex';e.style.alignItems='center';e.style.justifyContent='center';e.style.opacity='.15';e.innerHTML='<div style="text-align:center"><div style="font-size:32px;margin-bottom:8px">🎵</div><div style="font-size:11px;font-weight:700;letter-spacing:2px">ZONE AUDIO</div><div style="font-size:8px;margin-top:4px;letter-spacing:1px">MULTI-ZONE SYSTEM</div></div>';g.appendChild(e)}
+function mkZ(id){const c=COL[id];return`<div class="zc">
+<div class="zc-bar" style="background:${c}"></div>
+<div class="zc-body">
+  <div class="zc-hdr"><div class="zc-ico" style="background:${c}">${String(id).padStart(2,'0')}</div><div class="zc-info"><div class="zc-name">${NM[id-1]}</div><div class="zc-stat" id="ss-${id}"><span class="zc-dot" style="background:#cbd5e1"></span>OFFLINE</div></div><div class="zc-mode" id="cm-${id}"><button class="on" onclick="setSrc(${id},'local')">LOCAL</button><button onclick="setSrc(${id},'live')">LIVE</button></div></div>
+  <div class="zc-np" id="np-${id}" style="display:none"><div class="zc-song" id="sn-${id}"></div><div class="zc-trk" id="tr-${id}"></div><div class="zc-bar2"><span class="zc-bar-t" id="ct-${id}">0:00</span><div class="zc-bar-bg"><div class="zc-bar-fg" id="pf-${id}" style="background:${c}"></div></div><span class="zc-bar-t" id="dt-${id}">0:00</span></div></div>
+  <div class="zc-ctrl"><div class="zc-btns"><button class="tb2 sk" onclick="sendCmd(${id},'prev')">⏮</button><button class="tb2 play" onclick="sendCmd(${id},'play')">▶</button><button class="tb2 pause" onclick="sendCmd(${id},'pause')">⏸</button><button class="tb2 stop" onclick="sendCmd(${id},'stop')">⏹</button><button class="tb2 sk" onclick="sendCmd(${id},'next')">⏭</button><button class="tb2 mt" id="mu-${id}" onclick="togM(${id})">🔊</button></div><div class="zc-vol"><input type="range" min="0" max="100" value="70" id="vl-${id}" oninput="sendVol(${id},this.value)"><span class="vn" id="vv-${id}">70</span></div></div>
+</div></div>`}
+function buildGrid(){document.getElementById('zgrid').innerHTML=IDS.map(mkZ).join('')}
 
-function listen(){IDS.forEach(id=>{db.ref(`players/${id}/status`).on('value',s=>{const st=s.val();if(!st)return;
-  const el=document.getElementById(`ss-${id}`),on=st&&(Date.now()-st.ts<8000),ss=st?.st||'offline';
-  if(el){const c=COL[id];const dc=on?(ss==='playing'||ss==='live'?'#34d399':'#fbbf24'):'rgba(255,255,255,.15)';const gw=on&&(ss==='playing'||ss==='live')?`0 0 6px ${dc}`:'none';el.innerHTML=`<span class="tile-dot" style="background:${dc};box-shadow:${gw}"></span>${(on?(st.muted?'🔇 ':'')+ss:'OFFLINE').toUpperCase()}`;el.style.color=on?'rgba(255,255,255,.45)':'rgba(255,255,255,.2)'}
-  const np=document.getElementById(`np-${id}`);if(st.fn&&on){np.style.display='block';document.getElementById(`sn-${id}`).textContent=st.fn.replace(/\.[^/.]+$/,'');document.getElementById(`tr-${id}`).textContent=st.src==='live'?'LIVE STREAM':`Track ${(st.idx||0)+1} of ${st.total||0}`;document.getElementById(`ct-${id}`).textContent=fT(st.pos);document.getElementById(`dt-${id}`).textContent=fT(st.dur);if(st.dur>0)document.getElementById(`pf-${id}`).style.width=(st.pos/st.dur*100)+'%'}else np.style.display='none';
-  const cm=document.getElementById(`cm-${id}`);if(cm&&st.src){cm.children[0].classList.toggle('on',st.src==='local');cm.children[1].classList.toggle('on',st.src==='live')}
-  const mu=document.getElementById(`mu-${id}`);if(mu){mu.textContent=st.muted?'🔇':'🔊';mu.classList.toggle('muted',!!st.muted)}})})}
-
+function listen(){IDS.forEach(id=>{db.ref(`players/${id}/status`).on('value',s=>{const st=s.val();if(!st)return;const el=document.getElementById(`ss-${id}`),on=st&&(Date.now()-st.ts<8000),ss=st?.st||'offline';if(el){const dc=on?(ss==='playing'||ss==='live'?'#22c55e':'#eab308'):'#cbd5e1';const gw=on&&(ss==='playing'||ss==='live')?'0 0 5px rgba(34,197,94,.3)':'none';el.innerHTML=`<span class="zc-dot" style="background:${dc};box-shadow:${gw}"></span>${(on?(st.muted?'🔇 ':'')+ss:'OFFLINE').toUpperCase()}`;el.style.color=on?(ss==='playing'||ss==='live'?'#22c55e':'#64748b'):'#94a3b8'}const np=document.getElementById(`np-${id}`);if(st.fn&&on){np.style.display='block';document.getElementById(`sn-${id}`).textContent=st.fn.replace(/\.[^/.]+$/,'');document.getElementById(`tr-${id}`).textContent=st.src==='live'?'LIVE':`${(st.idx||0)+1}/${st.total||0}`;document.getElementById(`ct-${id}`).textContent=fT(st.pos);document.getElementById(`dt-${id}`).textContent=fT(st.dur);if(st.dur>0)document.getElementById(`pf-${id}`).style.width=(st.pos/st.dur*100)+'%'}else np.style.display='none';const cm=document.getElementById(`cm-${id}`);if(cm&&st.src){cm.children[0].classList.toggle('on',st.src==='local');cm.children[1].classList.toggle('on',st.src==='live')}const mu=document.getElementById(`mu-${id}`);if(mu){mu.textContent=st.muted?'🔇':'🔊';mu.classList.toggle('muted',!!st.muted)}})})}
 function sendCmd(id,a){db.ref(`players/${id}/command`).set({action:a,ts:Date.now()})}
 function sendVol(id,v){document.getElementById(`vv-${id}`).textContent=v;db.ref(`players/${id}/command`).set({action:'volume',volume:v/100,ts:Date.now()})}
 function setSrc(id,s){db.ref(`players/${id}/command`).set({action:'source',source:s,ts:Date.now()});const el=document.getElementById(`cm-${id}`);if(el){el.children[0].classList.toggle('on',s==='local');el.children[1].classList.toggle('on',s==='live')}}
