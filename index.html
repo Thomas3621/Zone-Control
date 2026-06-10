@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ZoneAudio — Controller</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0e1a;--sf:#131729;--cd:#181d33;--cu:#1f2640;--bd:#2a3154;--bl:#36406b;--ac:#6c5ce7;--gn:#00cec9;--gng:rgba(0,206,201,.35);--am:#fdcb6e;--rd:#ff6b81;--tx:#e8eaf6;--t2:#9aa3c4;--t3:#5a6384;--mn:'JetBrains Mono',monospace;--sn:'Inter',system-ui,sans-serif;--r:12px;--rs:8px}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--sn);background:var(--bg);color:var(--tx);min-height:100vh;-webkit-font-smoothing:antialiased}input,select,button{font-family:inherit}
+.ctrl{padding:16px 16px 40px;min-height:100vh;max-width:920px;margin:0 auto}
+.cbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--bd)}
+.cbr{display:flex;align-items:center;gap:10px}
+.cic{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#6c5ce7,#e84393);display:flex;align-items:center;justify-content:center;font-family:var(--mn);font-size:12px;font-weight:700;color:#fff}
+.ctt{font-size:15px;font-weight:700}
+.cacts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.sync-badge{font-family:var(--mn);font-size:9px;padding:4px 10px;border-radius:12px;background:rgba(162,155,254,.12);color:#a29bfe;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all .2s}.sync-badge:hover{border-color:#a29bfe}
+.mbtn{padding:7px 14px;border:1px solid var(--bd);border-radius:var(--rs);font-family:var(--mn);font-size:10px;font-weight:600;cursor:pointer;color:var(--t2);background:var(--sf);transition:all .2s}.mbtn:hover{border-color:var(--bl);color:var(--tx)}
+.lb{font-family:var(--mn);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--t3)}
+.chs{display:flex;flex-direction:column;gap:10px}
+.ch{border-radius:var(--r);border:1px solid var(--bd);background:var(--cd);overflow:hidden;transition:border-color .2s}.ch:hover{border-color:var(--bl)}
+.ch-bar{height:3px;width:100%}.ch-body{padding:18px 20px}
+.ch-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.ch-badge{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--mn);font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.ch-meta{flex:1;min-width:0}.ch-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.ch-st{font-family:var(--mn);font-size:9px;font-weight:600;letter-spacing:1.5px;display:flex;align-items:center;gap:5px;color:var(--t3)}
+.ch-dot{width:6px;height:6px;border-radius:50%;background:var(--t3);transition:all .3s}
+.ch-src{display:flex;background:var(--bg);border-radius:6px;padding:2px;border:1px solid var(--bd);margin-left:auto;flex-shrink:0}
+.ch-src button{padding:5px 12px;border:none;border-radius:4px;font-family:var(--mn);font-size:9px;font-weight:600;cursor:pointer;color:var(--t3);background:transparent;transition:all .2s}
+.ch-src button.active{background:var(--cu);color:#a29bfe}
+.ch-np{background:var(--bg);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px}
+.ch-song{font-size:13px;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch-detail{font-family:var(--mn);font-size:10px;color:var(--t3);margin-bottom:8px}
+.ch-prog{display:flex;align-items:center;gap:8px}.ch-prog-bar{flex:1;height:3px;background:var(--bd);border-radius:2px;overflow:hidden}.ch-prog-fill{height:100%;border-radius:2px;transition:width .5s}.ch-prog-time{font-family:var(--mn);font-size:9px;color:var(--t3);min-width:32px}
+.ch-ctrls{display:flex;gap:6px;margin-bottom:12px}
+.ch-cb{padding:8px 0;border:1px solid var(--bd);border-radius:var(--rs);font-size:14px;cursor:pointer;color:var(--t2);background:var(--bg);transition:all .15s;display:flex;align-items:center;justify-content:center}
+.ch-cb:hover{color:var(--tx);border-color:var(--bl)}
+.ch-cb.b-play{flex:1}.ch-cb.b-play:hover{color:#00cec9;border-color:#00cec9}
+.ch-cb.b-pause{flex:1}.ch-cb.b-pause:hover{color:#fdcb6e;border-color:#fdcb6e}
+.ch-cb.b-stop{flex:1}.ch-cb.b-stop:hover{color:#ff6b81;border-color:#ff6b81}
+.ch-cb.b-prev{width:40px}.ch-cb.b-next{width:40px}.ch-cb.b-prev:hover,.ch-cb.b-next:hover{color:#a29bfe;border-color:#a29bfe}
+.ch-cb.b-mute{width:40px;font-size:12px}.ch-cb.b-mute.muted{background:rgba(255,107,129,.12);border-color:#ff6b81;color:#ff6b81}
+.ch-vol{display:flex;align-items:center;gap:10px}
+.ch-vol .vl2{font-family:var(--mn);font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--t3);width:26px}
+.ch-vol input[type=range]{flex:1;height:3px;cursor:pointer;appearance:none;background:var(--bd);border-radius:2px;outline:none}
+.ch-vol input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;border-radius:50%;background:var(--t2);border:2px solid var(--bg);cursor:pointer}
+.ch-vol .vv2{font-family:var(--mn);font-size:11px;font-weight:600;color:var(--t2);width:26px;text-align:right}
+.ch-err2{font-family:var(--mn);font-size:9px;color:var(--rd);margin-top:8px}
+.cfooter{font-family:var(--mn);font-size:9px;color:var(--t3);text-align:center;margin-top:20px;letter-spacing:.8px}
+.conn{text-align:center;padding:40px;font-family:var(--mn);font-size:12px;color:var(--t2)}
+@media(max-width:520px){.cbar{flex-direction:column;align-items:flex-start}.ch-body{padding:14px 16px}}
+</style>
+</head>
+<body>
+<div class="ctrl">
+  <div class="cbar">
+    <div class="cbr"><div class="cic">ZA</div><span class="ctt">ZoneAudio Controller</span></div>
+    <div class="cacts">
+      <div class="sync-badge" id="sync-badge" onclick="syncDrive()">↻ SYNC DRIVE</div>
+      <span class="lb" id="sync-time"></span>
+      <button class="mbtn" onclick="masterCmd('play')">▶ ALL</button>
+      <button class="mbtn" onclick="masterCmd('pause')">⏸ ALL</button>
+      <button class="mbtn" onclick="masterCmd('stop')">⏹ ALL</button>
+    </div>
+  </div>
+  <p class="conn" id="conn">Connecting to Firebase…</p>
+  <div class="chs" id="strips" style="display:none"></div>
+  <p class="cfooter">C:\MUSIC LOCAL PLAYBACK · AUTO-SYNC GOOGLE DRIVE 03:00 · LIVE VIA WEBRTC</p>
+</div>
+<script>
+const FB={apiKey:"AIzaSyDgxVnFlhE5UtQws74QDdwsU2FFs9sxCVA",databaseURL:"https://audiocontroller-670a5-default-rtdb.firebaseio.com",projectId:"audiocontroller-670a5"};
+const GK="AIzaSyA8km_ZwkkRGVInQq3opWjoHJWOGW8DI2E",GF="13KGisCtqNCWuulbARBN0ufF3M-6UdC85";
+const IDS=[1,2,3,4,5],COL={1:'#ff6b81',2:'#00cec9',3:'#fdcb6e',4:'#a29bfe',5:'#74b9ff'};
+const NM=['Lobby','Main Hall','Conference A','Rooftop','Lounge'];
+const AX=['mp3','wav','ogg','flac','aac','m4a'];
+let db;
+function fmtT(s){if(!s||!isFinite(s))return'0:00';const m=Math.floor(s/60),ss=Math.floor(s%60);return m+':'+(ss<10?'0':'')+ss}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function fbSet(p,v){db.ref(p).set(v)}
+function fbOn(p,cb){db.ref(p).on('value',s=>cb(s.val()))}
+
+firebase.initializeApp(FB);db=firebase.database();
+db.ref('_ping').set(Date.now()).then(()=>{
+  document.getElementById('conn').style.display='none';
+  document.getElementById('strips').style.display='flex';
+  buildStrips();startListen();
+  fbOn('sync/lastSync',ts=>{if(ts){const d=new Date(ts);document.getElementById('sync-time').textContent=`LAST: ${d.toLocaleDateString()} ${d.toLocaleTimeString()}`}});
+}).catch(e=>{document.getElementById('conn').textContent='✗ '+e.message});
+
+async function syncDrive(){
+  const b=document.getElementById('sync-badge');b.textContent='↻ SYNCING…';
+  try{const r=await fetch(`https://www.googleapis.com/drive/v3/files?q='${GF}'+in+parents+and+trashed=false&key=${GK}&fields=files(id,name,size)&pageSize=500`);
+    const d=await r.json();const songs=(d.files||[]).filter(f=>{const e=(f.name.split('.').pop()||'').toLowerCase();return AX.includes(e)}).sort((a,c)=>a.name.localeCompare(c.name)).map((f,i)=>({id:f.id,name:f.name,size:parseInt(f.size)||0,index:i}));
+    await fbSet('playlist',songs);await fbSet('sync/lastSync',Date.now());b.textContent=`✓ ${songs.length} SONGS`;setTimeout(()=>b.textContent='↻ SYNC DRIVE',3000);
+  }catch(e){b.textContent='✗ FAILED';setTimeout(()=>b.textContent='↻ SYNC DRIVE',3000)}}
+
+function buildStrips(){const c=document.getElementById('strips');c.innerHTML='';IDS.forEach(id=>{const col=COL[id];const s=document.createElement('div');s.className='ch';s.innerHTML=`<div class="ch-bar" style="background:${col}"></div><div class="ch-body"><div class="ch-top"><div class="ch-badge" style="background:${col}">${String(id).padStart(2,'0')}</div><div class="ch-meta"><div class="ch-name">${NM[id-1]}</div><div class="ch-st" id="ss-${id}"><span class="ch-dot"></span>OFFLINE</div></div><div class="ch-src" id="csrc-${id}"><button class="active" onclick="setSrc(${id},'local')">LOCAL</button><button onclick="setSrc(${id},'live')">LIVE</button></div></div><div class="ch-np" id="cnp-${id}" style="display:none"><div class="ch-song" id="csong-${id}"></div><div class="ch-detail" id="cdtl-${id}"></div><div class="ch-prog"><span class="ch-prog-time" id="cct-${id}">0:00</span><div class="ch-prog-bar"><div class="ch-prog-fill" id="cpf-${id}" style="background:${col}"></div></div><span class="ch-prog-time" id="cdt-${id}">0:00</span></div></div><div class="ch-ctrls"><button class="ch-cb b-prev" onclick="sendCmd(${id},'prev')">⏮</button><button class="ch-cb b-play" onclick="sendCmd(${id},'play')">▶</button><button class="ch-cb b-pause" onclick="sendCmd(${id},'pause')">⏸</button><button class="ch-cb b-stop" onclick="sendCmd(${id},'stop')">⏹</button><button class="ch-cb b-next" onclick="sendCmd(${id},'next')">⏭</button><button class="ch-cb b-mute" id="cmute-${id}" onclick="toggleMute(${id})">🔊</button></div><div class="ch-vol"><span class="vl2">VOL</span><input type="range" min="0" max="100" value="70" id="vol-${id}" oninput="sendVol(${id},this.value)"><span class="vv2" id="vv-${id}">70</span></div><p class="ch-err2" id="se-${id}" style="display:none"></p></div>`;c.appendChild(s)})}
+
+function startListen(){IDS.forEach(id=>{fbOn(`players/${id}/status`,st=>{if(!st)return;const el=document.getElementById(`ss-${id}`);const on=st&&(Date.now()-st.ts<8000);const s=st?.st||'offline';if(el){const dc=on?(s==='playing'||s==='live'?'var(--gn)':'var(--am)'):'var(--t3)';const glow=on&&(s==='playing'||s==='live')?'0 0 6px var(--gng)':'none';el.innerHTML=`<span class="ch-dot" style="background:${dc};box-shadow:${glow}"></span>${(on?(st.muted?'🔇 ':'')+s:'offline').toUpperCase()}`;el.style.color=on?(s==='playing'||s==='live'?'var(--gn)':'var(--t2)'):'var(--t3)'}const np=document.getElementById(`cnp-${id}`);if(st.fn&&on){np.style.display='block';document.getElementById(`csong-${id}`).textContent=st.fn.replace(/\.[^/.]+$/,'');document.getElementById(`cdtl-${id}`).textContent=st.src==='live'?'LIVE BROADCAST':`TRACK ${(st.idx||0)+1}/${st.total||0} · LOCAL`;document.getElementById(`cct-${id}`).textContent=fmtT(st.pos);document.getElementById(`cdt-${id}`).textContent=fmtT(st.dur);if(st.dur>0)document.getElementById(`cpf-${id}`).style.width=(st.pos/st.dur*100)+'%'}else np.style.display='none';const srcEl=document.getElementById(`csrc-${id}`);if(srcEl&&st.src){srcEl.children[0].classList.toggle('active',st.src==='local');srcEl.children[1].classList.toggle('active',st.src==='live')}const muteEl=document.getElementById(`cmute-${id}`);if(muteEl){muteEl.textContent=st.muted?'🔇':'🔊';muteEl.classList.toggle('muted',!!st.muted)}const se=document.getElementById(`se-${id}`);if(st.err&&st.err.length>0&&on){se.textContent=st.err;se.style.display='block'}else se.style.display='none'})})}
+
+async function sendCmd(id,a){await fbSet(`players/${id}/command`,{action:a,ts:Date.now()})}
+async function sendVol(id,v){document.getElementById(`vv-${id}`).textContent=v;await fbSet(`players/${id}/command`,{action:'volume',volume:v/100,ts:Date.now()})}
+async function setSrc(id,s){await fbSet(`players/${id}/command`,{action:'source',source:s,ts:Date.now()});const el=document.getElementById(`csrc-${id}`);if(el){el.children[0].classList.toggle('active',s==='local');el.children[1].classList.toggle('active',s==='live')}}
+async function toggleMute(id){const snap=await db.ref(`players/${id}/status`).get();const st=snap.val();await fbSet(`players/${id}/command`,{action:'mute',mute:!(st?.muted),ts:Date.now()})}
+async function masterCmd(a){for(const id of IDS)await fbSet(`players/${id}/command`,{action:a,ts:Date.now()})}
+</script>
+</body>
+</html>
