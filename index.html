@@ -123,7 +123,8 @@ body::before{background:radial-gradient(circle at 12% 8%,rgba(45,124,255,.14),tr
   --glow:0 0 0 3px rgba(0,122,255,.15);
 }
 html,body{background:var(--bg)!important;color:var(--text)!important}
-body::before,body::after{display:none!important}
+body::before{content:''!important;display:block!important;position:fixed;inset:-25%;pointer-events:none;background:radial-gradient(circle at 10% 8%,rgba(0,122,255,.06),transparent 30%),radial-gradient(circle at 90% 12%,rgba(139,92,246,.04),transparent 28%),radial-gradient(circle at 50% 100%,rgba(52,199,89,.03),transparent 30%);z-index:-2}
+body::after{content:''!important;display:block!important;position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(0,0,0,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.02) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.5),transparent 80%);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,.5),transparent 80%);z-index:-1}
 .conn-s{background:var(--bg)!important;color:var(--muted)!important}
 
 /* Panels and cards */
@@ -153,6 +154,8 @@ body::before,body::after{display:none!important}
 /* Zone card glass overlay — lighter */
 .zone-card::before{background:none!important}
 .zone-card.selected::after{display:none!important}
+.zone-card{border:1.5px solid rgba(0,122,255,.2)!important;box-shadow:0 2px 12px rgba(0,0,0,.06),0 0 0 0.5px rgba(0,122,255,.08)!important}
+.zone-card.selected{border-color:rgba(0,122,255,.45)!important;box-shadow:var(--glow),var(--shadow)!important}
 
 /* Blue accent elements */
 .hb.acc,.ctl.play,.round-btn.main,.tab.active,.tiny-play,.mb2.pri,.lic-overlay .lb2,.status-ok,.sync-round{
