@@ -108,175 +108,146 @@ body::before{background:radial-gradient(circle at 12% 8%,rgba(45,124,255,.14),tr
 
 
 /* ─────────────────────────────────────────────
-   Dark Neo Blue Theme Override
+   Apple Clean Light Theme
    ───────────────────────────────────────────── */
 :root{
-  --bg:#06111f;
-  --bg2:#0a1626;
-  --panel:rgba(16,25,42,.92);
-  --panel2:#121f34;
-  --panel3:#0c1728;
-  --line:rgba(148,163,184,.16);
-  --line2:rgba(148,163,184,.24);
-  --text:#edf6ff;
-  --text2:#b7c7dc;
-  --muted:#7f93ad;
-  --blue:#38bdf8;
-  --blue2:#0ea5e9;
-  --blue3:#7dd3fc;
-  --green:#22c55e;
-  --amber:#f59e0b;
-  --red:#ef4444;
-  --shadow:0 22px 54px rgba(0,0,0,.44),inset 0 1px 0 rgba(255,255,255,.045);
-  --shadowSoft:0 12px 28px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.045);
-  --shadowInset:inset 2px 2px 8px rgba(0,0,0,.36),inset -1px -1px 4px rgba(255,255,255,.045);
-  --glow:0 0 0 1px rgba(56,189,248,.22),0 0 0 3px rgba(56,189,248,.10),0 18px 42px rgba(14,165,233,.20);
+  --bg:#f5f5f7;--bg2:#ffffff;
+  --panel:#ffffff;--panel2:#f9fafb;--panel3:#f2f3f5;
+  --line:rgba(0,0,0,.08);--line2:rgba(0,0,0,.12);--line-strong:rgba(0,0,0,.15);
+  --text:#1d1d1f;--text2:#424245;--muted:#86868b;
+  --blue:#007aff;--blue2:#0066d6;--blue3:#4da3ff;
+  --green:#34c759;--amber:#ff9f0a;--red:#ff3b30;
+  --shadow:0 2px 12px rgba(0,0,0,.06),0 0.5px 0 rgba(0,0,0,.04);
+  --shadowSoft:0 1px 4px rgba(0,0,0,.04),0 0.5px 0 rgba(0,0,0,.03);
+  --shadowInset:inset 0 1px 3px rgba(0,0,0,.04);
+  --glow:0 0 0 3px rgba(0,122,255,.15);
 }
-html,body{background:#06111f!important;color:var(--text)!important}
-body::before{content:'';position:fixed;inset:-24%;z-index:-2;pointer-events:none;background:radial-gradient(circle at 12% 9%,rgba(56,189,248,.24),transparent 28%),radial-gradient(circle at 88% 12%,rgba(59,130,246,.20),transparent 28%),radial-gradient(circle at 50% 110%,rgba(34,197,94,.10),transparent 32%),linear-gradient(135deg,#06111f 0%,#0b1728 48%,#050b14 100%)!important}
-body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(148,163,184,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.035) 1px,transparent 1px),radial-gradient(circle at 20% 20%,rgba(56,189,248,.12) 1px,transparent 1px)!important;background-size:42px 42px,42px 42px,18px 18px!important;opacity:.75!important;mask-image:linear-gradient(to bottom,rgba(0,0,0,.70),transparent 88%)!important;-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,.70),transparent 88%)!important}
-.conn-s{background:radial-gradient(circle at 50% 10%,rgba(56,189,248,.18),transparent 35%),#06111f!important;color:var(--muted)!important}
-.neo,.side,.hdr,.zone-card,.now-card,.side-panel,.schedule-card,.prayer-card,.system-card,.modal,.foot{background:linear-gradient(145deg,rgba(18,29,50,.94),rgba(8,15,27,.94))!important;border-color:var(--line)!important;box-shadow:var(--shadow)!important;color:var(--text)!important}
-.logo-tile,.brand-icon,.status-chip,.hb,.pill,.nav-btn,.quick-mute,.round-btn,.event,.zone-icon,.ctl,.zone-np,.mode-switch button,.tool-card,.tool-ic,.field,.field input,.field select,.big-event,.prayer-tile,.next-box,.lic-badge,.mb2.gho,.minfo,.foot-seg,.sync-round,.tiny-play,.pcf-city,.tabs,.tab{background:linear-gradient(145deg,rgba(24,38,63,.94),rgba(10,18,32,.94))!important;border-color:rgba(148,163,184,.16)!important;box-shadow:var(--shadowSoft)!important;color:var(--text2)!important}
-.nav-btn:hover,.hb:hover,.round-btn:hover,.ctl:hover,.tiny-play:hover{background:linear-gradient(145deg,rgba(31,48,78,.96),rgba(12,22,38,.96))!important}
-.nav-btn.active,.zone-card.selected,.prayer-tile.next,.next-box{background:linear-gradient(145deg,rgba(18,45,72,.96),rgba(7,22,40,.96))!important;box-shadow:var(--shadowSoft),var(--glow)!important;border-color:rgba(56,189,248,.24)!important}
-.zone-card::before{background:linear-gradient(135deg,rgba(255,255,255,.085),transparent 34%)!important}.zone-card.selected::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(56,189,248,.18)}
-.brand-title,.page-title h2,.section-head h3,.zone-name,.now-title,.zone-song,.prayer-tile .pt,.next-box b,.switch-title,.modal h2,.foot-val{color:var(--text)!important}.brand-sub,.page-title p,.section-head p,.zone-status,.now-sub,.source-line,.switch-sub,.event span,.big-event span,.field label,.foot-lbl,.status-txt span,.tool-card span,.zone-track,.time,.muted{color:var(--muted)!important}
-.nav-ic,.nav-btn.active .nav-tx,.brand-title .accent,.brand-icon,.logo-tile,.tool-ic,.zone-icon,.tag,.badge,.event-ic,.foot-ic,.schedule-status,.view-all,.status-txt b{color:var(--blue)!important}
-.hb.acc,.ctl.play,.round-btn.main,.mode-switch button.on,.tab.active,.tiny-play,.mb2.pri,.lic-overlay .lb2,.status-ok,.sync-round{background:linear-gradient(135deg,var(--blue2),var(--blue3))!important;color:#f8fbff!important;border-color:rgba(125,211,252,.34)!important;box-shadow:0 14px 30px rgba(14,165,233,.24)!important}
-.tag,.badge,.event-ic,.foot-ic,.schedule-status{background:rgba(56,189,248,.13)!important;border-color:rgba(56,189,248,.20)!important}.badge.gray,.schedule-status.off{background:rgba(148,163,184,.12)!important;color:var(--muted)!important;border-color:rgba(148,163,184,.16)!important}.status-led,.dot{box-shadow:0 0 0 5px rgba(34,197,94,.12),0 0 18px rgba(34,197,94,.34)!important}
-.cover{background:linear-gradient(165deg,#164e75 0%,#0ea5e9 42%,#0f172a 43%,#07101e 100%)!important;box-shadow:0 18px 42px rgba(0,0,0,.34)!important}.bar{background:linear-gradient(180deg,var(--blue),rgba(125,211,252,.22))!important}.track,.mini-track,.range::-webkit-slider-runnable-track{background:rgba(148,163,184,.20)!important;box-shadow:var(--shadowInset)!important}.range::-moz-range-track{background:rgba(148,163,184,.20)!important;box-shadow:var(--shadowInset)!important}.track-fill,.mini-fill{background:linear-gradient(90deg,var(--blue2),var(--blue3))!important}
-.range::-webkit-slider-thumb{background:#eff8ff!important;border-color:var(--blue)!important;box-shadow:0 5px 15px rgba(0,0,0,.42),0 0 16px rgba(56,189,248,.20)!important}.range::-moz-range-thumb{background:#eff8ff!important;border-color:var(--blue)!important;box-shadow:0 5px 15px rgba(0,0,0,.42),0 0 16px rgba(56,189,248,.20)!important}
-.field input,.field select,.modal textarea{background:rgba(5,12,23,.70)!important;color:var(--text)!important;border:1px solid rgba(148,163,184,.14)!important}.field input:focus,.field select:focus,.modal textarea:focus{border-color:rgba(56,189,248,.50)!important;box-shadow:0 0 0 4px rgba(56,189,248,.10)!important}
-.sl,.ssl{background:rgba(148,163,184,.22)!important;box-shadow:var(--shadowInset)!important}.sl::before,.ssl::before{background:#eaf6ff!important;box-shadow:0 5px 13px rgba(0,0,0,.40)!important}.sw input:checked+.sl,.sched-sw input:checked+.ssl{background:linear-gradient(135deg,#16a34a,#22c55e)!important}.lic-badge.valid{background:rgba(34,197,94,.14)!important;color:#86efac!important;border-color:rgba(34,197,94,.28)!important}.lic-badge.expired{background:rgba(239,68,68,.14)!important;color:#fca5a5!important;border-color:rgba(239,68,68,.28)!important}.lic-badge.none{background:rgba(148,163,184,.10)!important;color:var(--muted)!important}
-.prayer-panel.locked::after{background:rgba(5,12,23,.74)!important}.lic-overlay{background:rgba(5,12,23,.78)!important;color:var(--text2)!important}.lic-overlay .lt{color:var(--text2)!important}.modal-bg{background:rgba(2,6,23,.78)!important}.modal textarea::placeholder{color:rgba(183,199,220,.52)!important}.merr{color:#fca5a5!important}.mok,.mv.ok{color:#86efac!important}.mv.ex{color:#fca5a5!important}.mrow .ml{color:var(--muted)!important}.mrow .mv{color:var(--text2)!important}.mrem button{background:rgba(239,68,68,.12)!important;border:1px solid rgba(239,68,68,.28)!important;color:#fca5a5!important}
-.event:hover,.big-event:hover,.tool-card:hover,.foot-seg:hover{border-color:rgba(56,189,248,.18)!important}.view-all{background:transparent!important;box-shadow:none!important}.quick-mute span,.tool-ic,.zone-icon{filter:drop-shadow(0 0 10px rgba(56,189,248,.18))}.source-line b,.event-time,.event-time small{color:var(--blue)!important}.mini-stat .pill{color:var(--text2)!important}.foot{background:linear-gradient(145deg,rgba(18,29,50,.92),rgba(8,15,27,.92))!important}.foot-seg{background:linear-gradient(145deg,rgba(23,37,61,.94),rgba(10,18,32,.94))!important}.foot-ic{background:rgba(56,189,248,.13)!important}.tab{box-shadow:none!important}.tab.active{box-shadow:0 10px 22px rgba(14,165,233,.18)!important}
-/* ─────────────────────────────────────────────
-   Professional Polish — refined textures & glow
-   ───────────────────────────────────────────── */
+html,body{background:var(--bg)!important;color:var(--text)!important}
+body::before,body::after{display:none!important}
+.conn-s{background:var(--bg)!important;color:var(--muted)!important}
 
-/* Rich dark background with colorful radials */
-html,body{background:#060b18!important}
-body::before{background:
-  radial-gradient(circle at 5% 5%,rgba(236,72,153,.18),transparent 30%),
-  radial-gradient(circle at 95% 10%,rgba(56,189,248,.16),transparent 28%),
-  radial-gradient(circle at 30% 90%,rgba(168,85,247,.12),transparent 30%),
-  radial-gradient(circle at 70% 95%,rgba(34,211,167,.10),transparent 28%),
-  radial-gradient(circle at 50% 50%,rgba(99,102,241,.06),transparent 50%),
-  linear-gradient(145deg,#080e20 0%,#0a1428 50%,#060a16 100%)!important}
-body::after{opacity:.3!important}
-
-/* Frosted glass panels */
+/* Panels and cards */
 .neo,.side,.hdr,.zone-card,.now-card,.side-panel,.schedule-card,.prayer-card,.system-card,.modal,.foot{
-  background:linear-gradient(155deg,rgba(15,22,40,.9),rgba(8,13,26,.92))!important;
-  border:1px solid rgba(255,255,255,.08)!important;
-  box-shadow:0 20px 50px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.03) inset!important;
-  backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important}
+  background:var(--panel)!important;
+  border:0.5px solid var(--line)!important;
+  box-shadow:var(--shadow)!important;
+  color:var(--text)!important}
 
 /* Interactive elements */
-.logo-tile,.brand-icon,.status-chip,.hb,.pill,.nav-btn,.quick-mute,.round-btn,.event,.zone-icon,.ctl,.zone-np,.mode-switch button,.tool-card,.tool-ic,.field,.field input,.field select,.big-event,.prayer-tile,.next-box,.lic-badge,.mb2.gho,.minfo,.foot-seg,.sync-round,.tiny-play,.pcf-city,.tabs,.tab{
-  background:linear-gradient(150deg,rgba(18,28,50,.92),rgba(10,16,32,.95))!important;
-  border:1px solid rgba(255,255,255,.07)!important;
-  box-shadow:0 8px 24px rgba(0,0,0,.3),0 1px 0 rgba(255,255,255,.02) inset!important}
+.logo-tile,.brand-icon,.status-chip,.hb,.pill,.nav-btn,.quick-mute,.round-btn,.event,.zone-icon,.ctl,.zone-np,.tool-card,.tool-ic,.field,.field input,.field select,.big-event,.prayer-tile,.next-box,.lic-badge,.mb2.gho,.minfo,.foot-seg,.sync-round,.tiny-play,.pcf-city,.tabs,.tab{
+  background:var(--panel2)!important;
+  border:0.5px solid var(--line)!important;
+  box-shadow:var(--shadowSoft)!important;
+  color:var(--text2)!important}
 
-/* ── Colorful Logo & Brand ── */
-.logo-tile{background:linear-gradient(135deg,#ec4899,#8b5cf6,#3b82f6)!important;color:#fff!important;border:none!important;box-shadow:0 8px 28px rgba(139,92,246,.3)!important}
-.brand-icon{background:linear-gradient(135deg,#ec4899,#8b5cf6,#3b82f6)!important;color:#fff!important;border:none!important;box-shadow:0 8px 28px rgba(139,92,246,.25)!important}
-.brand-title{color:#f1f5f9!important;font-weight:900!important;letter-spacing:-.5px!important}
-.brand-title .accent{background:linear-gradient(135deg,#f472b6,#a78bfa,#60a5fa)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important}
+/* Hover */
+.nav-btn:hover,.hb:hover,.round-btn:hover,.ctl:hover,.tiny-play:hover,.tool-card:hover,.prayer-tile:hover,.event:hover,.foot-seg:hover{
+  background:#f0f1f3!important;box-shadow:var(--shadowSoft)!important}
 
-/* ── Colorful Sidebar Nav ── */
-.nav-btn{transition:all .2s ease!important}
-.nav-btn[data-nav="dashboard"]:hover,.nav-btn[data-nav="dashboard"].active{border-color:rgba(56,189,248,.25)!important;box-shadow:0 0 20px rgba(56,189,248,.12),0 8px 24px rgba(0,0,0,.3)!important}
-.nav-btn[data-nav="dashboard"].active .nav-ic{color:#38bdf8!important}
-.nav-btn[data-nav="players"]:hover,.nav-btn[data-nav="players"].active{border-color:rgba(34,197,94,.25)!important;box-shadow:0 0 20px rgba(34,197,94,.12),0 8px 24px rgba(0,0,0,.3)!important}
-.nav-btn[data-nav="players"].active .nav-ic{color:#22c55e!important}
-.nav-btn[data-nav="schedules"]:hover,.nav-btn[data-nav="schedules"].active{border-color:rgba(245,158,11,.25)!important;box-shadow:0 0 20px rgba(245,158,11,.12),0 8px 24px rgba(0,0,0,.3)!important}
-.nav-btn[data-nav="schedules"].active .nav-ic{color:#f59e0b!important}
-.nav-btn[data-nav="prayer"]:hover,.nav-btn[data-nav="prayer"].active{border-color:rgba(168,85,247,.25)!important;box-shadow:0 0 20px rgba(168,85,247,.12),0 8px 24px rgba(0,0,0,.3)!important}
-.nav-btn[data-nav="prayer"].active .nav-ic{color:#a855f7!important}
+/* Active / Selected */
+.nav-btn.active,.zone-card.selected,.prayer-tile.next,.next-box{
+  background:#fff!important;
+  border:1.5px solid var(--blue)!important;
+  box-shadow:var(--glow),var(--shadow)!important}
 
-/* Quick Mute — red/pink gradient */
-.quick-mute{background:linear-gradient(145deg,rgba(30,15,20,.94),rgba(18,8,14,.94))!important;border-color:rgba(239,68,68,.2)!important;box-shadow:0 0 15px rgba(239,68,68,.08),0 8px 24px rgba(0,0,0,.3)!important}
-.quick-mute span{color:#f87171!important;filter:drop-shadow(0 0 8px rgba(248,113,113,.3))!important}
+/* Zone card glass overlay — lighter */
+.zone-card::before{background:none!important}
+.zone-card.selected::after{display:none!important}
 
-/* ── Colorful Zone Cards ── */
-.zone-card[data-zone="1"],.zone-card:nth-child(1){border-color:rgba(239,68,68,.35)!important;box-shadow:0 0 25px rgba(239,68,68,.1),0 20px 50px rgba(0,0,0,.4)!important}
-.zone-card[data-zone="1"] .zone-icon,.zone-card:nth-child(1) .zone-icon{background:linear-gradient(135deg,#ef4444,#f97316)!important;color:#fff!important;box-shadow:0 6px 18px rgba(239,68,68,.3)!important}
-.zone-card[data-zone="2"],.zone-card:nth-child(2){border-color:rgba(34,197,94,.35)!important;box-shadow:0 0 25px rgba(34,197,94,.1),0 20px 50px rgba(0,0,0,.4)!important}
-.zone-card[data-zone="2"] .zone-icon,.zone-card:nth-child(2) .zone-icon{background:linear-gradient(135deg,#22c55e,#06b6d4)!important;color:#fff!important;box-shadow:0 6px 18px rgba(34,197,94,.3)!important}
-.zone-card[data-zone="3"],.zone-card:nth-child(3){border-color:rgba(234,179,8,.35)!important;box-shadow:0 0 25px rgba(234,179,8,.1),0 20px 50px rgba(0,0,0,.4)!important}
-.zone-card[data-zone="3"] .zone-icon,.zone-card:nth-child(3) .zone-icon{background:linear-gradient(135deg,#eab308,#f97316)!important;color:#fff!important;box-shadow:0 6px 18px rgba(234,179,8,.3)!important}
-.zone-card[data-zone="4"],.zone-card:nth-child(4){border-color:rgba(168,85,247,.35)!important;box-shadow:0 0 25px rgba(168,85,247,.1),0 20px 50px rgba(0,0,0,.4)!important}
-.zone-card[data-zone="4"] .zone-icon,.zone-card:nth-child(4) .zone-icon{background:linear-gradient(135deg,#a855f7,#ec4899)!important;color:#fff!important;box-shadow:0 6px 18px rgba(168,85,247,.3)!important}
+/* Blue accent elements */
+.hb.acc,.ctl.play,.round-btn.main,.tab.active,.tiny-play,.mb2.pri,.lic-overlay .lb2,.status-ok,.sync-round{
+  background:var(--blue)!important;
+  color:#fff!important;
+  border:none!important;
+  box-shadow:0 2px 8px rgba(0,122,255,.2)!important}
 
-/* Zone card top accent bars */
-.zone-card[data-zone="1"]::before,.zone-card:nth-child(1)::before{background:linear-gradient(90deg,transparent,rgba(239,68,68,.5),transparent)!important}
-.zone-card[data-zone="2"]::before,.zone-card:nth-child(2)::before{background:linear-gradient(90deg,transparent,rgba(34,197,94,.5),transparent)!important}
-.zone-card[data-zone="3"]::before,.zone-card:nth-child(3)::before{background:linear-gradient(90deg,transparent,rgba(234,179,8,.5),transparent)!important}
-.zone-card[data-zone="4"]::before,.zone-card:nth-child(4)::before{background:linear-gradient(90deg,transparent,rgba(168,85,247,.5),transparent)!important}
+/* Colored zone badges */
+.zone-icon{border-radius:10px!important}
 
-/* ── Colorful Accent Buttons ── */
-.hb.acc,.sync-round{background:linear-gradient(135deg,#0284c7,#38bdf8)!important;box-shadow:0 8px 24px rgba(14,165,233,.28)!important}
-.ctl.play,.round-btn.main,.tiny-play{background:linear-gradient(135deg,#059669,#34d399)!important;border-color:rgba(52,211,153,.3)!important;box-shadow:0 8px 24px rgba(34,197,94,.25)!important}
-.mb2.pri,.lic-overlay .lb2{background:linear-gradient(135deg,#7c3aed,#a78bfa)!important;box-shadow:0 8px 24px rgba(139,92,246,.25)!important}
+/* Text hierarchy */
+.brand-title,.page-title h2,.section-head h3,.zone-name,.now-title,.zone-song,.prayer-tile .pt,.next-box b,.switch-title,.modal h2,.foot-val{color:var(--text)!important}
+.brand-sub,.page-title p,.section-head p,.zone-status,.now-sub,.source-line,.switch-sub,.event span,.big-event span,.field label,.foot-lbl,.status-txt span,.tool-card span,.zone-track,.time{color:var(--muted)!important}
 
-/* Mode switch — colorful active */
-.mode-switch button.on,.tab.active{background:linear-gradient(135deg,#0284c7,#38bdf8)!important;color:#f0f9ff!important;box-shadow:0 6px 18px rgba(14,165,233,.22)!important}
+/* Accent colors */
+.nav-ic,.nav-btn.active .nav-tx,.brand-title .accent,.brand-icon,.logo-tile,.tool-ic,.zone-icon,.tag,.badge,.event-ic,.foot-ic,.schedule-status,.view-all,.status-txt b{color:var(--blue)!important}
+.brand-icon,.logo-tile{background:var(--blue)!important;color:#fff!important;box-shadow:0 4px 12px rgba(0,122,255,.15)!important}
 
-/* ── Colorful Now Playing ── */
-.now-title{font-weight:900!important;background:linear-gradient(135deg,#f0abfc,#818cf8,#38bdf8)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important}
-.cover{background:linear-gradient(165deg,#7c3aed 0%,#ec4899 30%,#f97316 60%,#eab308 100%)!important;box-shadow:0 20px 48px rgba(0,0,0,.5),0 0 30px rgba(168,85,247,.12)!important}
-.tag{background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(56,189,248,.15))!important;color:#c4b5fd!important;border-color:rgba(168,85,247,.2)!important}
+/* Sidebar */
+.side{background:var(--panel)!important;border-right:0.5px solid var(--line)!important}
+.quick-mute{background:#fff5f5!important;border-color:rgba(255,59,48,.12)!important;color:var(--red)!important}
+.quick-mute span{color:var(--red)!important}
+.quick-mute b{color:var(--red)!important}
 
-/* Track fills — rainbow gradient */
-.track-fill,.mini-fill{background:linear-gradient(90deg,#ec4899,#a855f7,#3b82f6,#22c55e)!important}
-.mini-slider span{background:linear-gradient(90deg,#3b82f6,#06b6d4)!important}
+/* Volume sliders */
+.track,.mini-track,.mini-slider,.range::-webkit-slider-runnable-track,.range::-moz-range-track{background:#e5e5ea!important}
+.track-fill,.mini-fill{background:var(--blue)!important}
+.range::-webkit-slider-thumb{background:#fff!important;border:2px solid var(--blue)!important;box-shadow:0 1px 4px rgba(0,0,0,.12)!important}
+.range::-moz-range-thumb{background:#fff!important;border:2px solid var(--blue)!important;box-shadow:0 1px 4px rgba(0,0,0,.12)!important}
 
-/* Equalizer bars — colorful */
-.bar{filter:drop-shadow(0 0 4px rgba(168,85,247,.3))!important}
-.bar:nth-child(odd){background:linear-gradient(180deg,#a855f7,rgba(168,85,247,.2))!important}
-.bar:nth-child(even){background:linear-gradient(180deg,#38bdf8,rgba(56,189,248,.2))!important}
+/* Toggle switches */
+.sl,.ssl{background:#d1d5db!important}
+input:checked+.sl,input:checked+.ssl{background:var(--green)!important}
+.sl::before,.ssl::before{background:#fff!important;box-shadow:0 1px 3px rgba(0,0,0,.15)!important}
 
-/* Volume slider — colorful thumb */
-.range::-webkit-slider-thumb{background:linear-gradient(135deg,#f0f9ff,#e0e7ff)!important;border:2px solid rgba(139,92,246,.5)!important;box-shadow:0 4px 14px rgba(0,0,0,.5),0 0 12px rgba(139,92,246,.2)!important}
+/* Status dots */
+.dot{border-radius:50%!important}
 
-/* ── Colorful Tags & Badges ── */
-.badge{background:linear-gradient(135deg,rgba(56,189,248,.12),rgba(139,92,246,.12))!important;color:#93c5fd!important;border-color:rgba(99,102,241,.2)!important}
-.event-ic{background:linear-gradient(135deg,rgba(236,72,153,.12),rgba(168,85,247,.12))!important;color:#f0abfc!important}
-.foot-ic{background:linear-gradient(135deg,rgba(56,189,248,.12),rgba(34,197,94,.12))!important;color:#38bdf8!important}
+/* Cover art */
+.cover{background:linear-gradient(135deg,#007aff,#5ac8fa)!important;box-shadow:0 8px 24px rgba(0,122,255,.15)!important}
 
-/* ── Colorful Prayer Tiles ── */
-.prayer-tile.next{border-color:rgba(245,158,11,.3)!important;box-shadow:0 0 20px rgba(245,158,11,.1),0 8px 24px rgba(0,0,0,.3)!important}
-.prayer-tile .pt{font-weight:900!important}
+/* Equalizer */
+.bar{background:var(--blue)!important}
 
-/* ── Colorful Status ── */
-.status-chip{border-color:rgba(34,197,94,.2)!important;box-shadow:0 0 15px rgba(34,197,94,.06),0 8px 24px rgba(0,0,0,.3)!important}
-.status-led{animation:ledPulse 3s ease-in-out infinite!important}
-@keyframes ledPulse{0%,100%{box-shadow:0 0 0 5px rgba(34,197,94,.1),0 0 14px rgba(34,197,94,.3)}50%{box-shadow:0 0 0 7px rgba(34,197,94,.15),0 0 24px rgba(34,197,94,.5)}}
+/* Now playing card */
+.now-card{border-left:3px solid var(--blue)!important}
+.now-title{color:var(--text)!important}
 
-/* ── Colorful Footer ── */
-.foot-seg:nth-child(1){border-color:rgba(56,189,248,.12)!important}
-.foot-seg:nth-child(2){border-color:rgba(34,197,94,.12)!important}
-.foot-seg:nth-child(3){border-color:rgba(168,85,247,.12)!important}
-.foot-seg:nth-child(4){border-color:rgba(245,158,11,.12)!important}
+/* Tags & badges */
+.tag,.badge{background:#f0f5ff!important;color:var(--blue)!important;border:0.5px solid rgba(0,122,255,.12)!important}
+.badge.gray{background:#f2f3f5!important;color:var(--muted)!important;border-color:var(--line)!important}
 
-/* ── Schedule cards colors ── */
-.schedule-card{border-color:rgba(245,158,11,.15)!important}
-.schedule-status{background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(56,189,248,.12))!important;color:#86efac!important}
+/* Muted button */
+.ctl.muted{background:#fff5f5!important;color:var(--red)!important;border-color:rgba(255,59,48,.15)!important}
 
-/* ── Colorful License Badge ── */
-.lic-badge.valid{background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.12))!important;color:#86efac!important;border-color:rgba(34,197,94,.25)!important;box-shadow:0 0 12px rgba(34,197,94,.08)!important}
+/* Schedule status */
+.schedule-status{background:#f0fdf4!important;color:var(--green)!important;border-color:rgba(52,199,89,.12)!important}
+.schedule-status.off{background:var(--panel2)!important;color:var(--muted)!important}
 
-/* Hover lift */
-.zone-card,.nav-btn,.hb,.ctl,.round-btn,.prayer-tile,.tool-card,.event,.foot-seg,.tab,.tiny-play{transition:all .2s cubic-bezier(.2,.8,.3,1)!important}
-.zone-card:hover,.tool-card:hover,.event:hover,.foot-seg:hover{transform:translateY(-2px)!important}
+/* License badge */
+.lic-badge.valid{background:#f0fdf4!important;color:#16a34a!important;border-color:rgba(52,199,89,.15)!important}
+.lic-badge.none{background:var(--panel2)!important;color:var(--muted)!important}
+.lic-badge.expired{background:#fef2f2!important;color:var(--red)!important;border-color:rgba(255,59,48,.12)!important}
 
-/* Scrollbar */
-::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(148,163,184,.2);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:rgba(148,163,184,.35)}
+/* Prayer panel locked */
+.prayer-panel.locked::after{background:rgba(245,245,247,.88)!important;backdrop-filter:blur(4px)!important}
+.lic-overlay{background:rgba(245,245,247,.92)!important}
+.lic-overlay .lic-txt{color:var(--muted)!important}
 
-@media(max-width:960px){.side{background:linear-gradient(145deg,rgba(15,22,40,.94),rgba(8,13,26,.94))!important}}
+/* Modal */
+.modal-bg{background:rgba(0,0,0,.2)!important;backdrop-filter:blur(10px)!important}
+.modal{background:#fff!important;box-shadow:0 24px 60px rgba(0,0,0,.12)!important}
+.modal h2{color:var(--text)!important}
+.modal textarea{background:var(--panel2)!important;border-color:var(--line)!important;color:var(--text)!important}
+.modal textarea:focus{border-color:var(--blue)!important;box-shadow:0 0 0 3px rgba(0,122,255,.1)!important}
+.merr{color:var(--red)!important}.mok{color:var(--green)!important}
+.minfo{background:var(--panel2)!important;border-color:var(--line)!important}
+.mrow .ml{color:var(--muted)!important}.mrow .mv{color:var(--text2)!important}
+.mrow .mv.ok{color:var(--green)!important}.mrow .mv.ex{color:var(--red)!important}
 
+/* Footer */
+.foot{background:var(--panel)!important;border-top:0.5px solid var(--line)!important}
+
+/* Scrollbar — minimal */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.2)}
+
+/* Smooth transitions */
+.zone-card,.nav-btn,.hb,.ctl,.round-btn,.prayer-tile,.tool-card,.event,.foot-seg,.tab,.tiny-play{transition:all .15s ease!important}
+
+/* Mobile sidebar */
+@media(max-width:960px){.side{background:var(--panel)!important;border-right:none!important}}
 </style>
 </head>
 <body>
@@ -461,18 +432,15 @@ function zoneCard(id,player=false){const selected=id===1?' selected':'';const ex
   <div class="vol-block"><div class="vol-head"><span>Volume</span><span><span data-vol-display="${id}">70</span>%</span></div><input class="range" type="range" min="0" max="100" value="70" data-vol-range="${id}" oninput="sendVol(${id},this.value)"></div>
   <div class="zone-np" data-nowplaying="${id}"><div class="zone-song" data-song="${id}"></div><div class="zone-track" data-track="${id}"></div><div class="zone-prog"><span class="time" data-cur="${id}">0:00</span><div class="mini-track"><div class="mini-fill" data-progress="${id}"></div></div><span class="time" data-dur="${id}">0:00</span></div></div>
   <div class="source-line"><div><span>Source</span><b data-source="${id}">${src}</b></div><span class="badge" data-badge="${id}"><span class="dot" style="background:var(--blue)"></span>Ready</span></div>
-  <div class="mode-switch" data-mode="${id}"><button type="button" class="on" data-mode-btn="${id}:local" onclick="setSrc(${id},'local')">LOCAL</button><button type="button" data-mode-btn="${id}:live" onclick="setSrc(${id},'live')">LIVE</button></div>
 </div>`}
 function buildUI(){qs('#dash-zones').innerHTML=IDS.map(id=>zoneCard(id,false)).join('');qs('#player-zones').innerHTML=IDS.map(id=>zoneCard(id,true)).join('');renderPrayerTiles();syncSchedControls();syncPrayerControls();refreshAllZones()}
-function refreshAllZones(){IDS.forEach(refreshZone);const online=IDS.filter(id=>isOnline(statusCache[id])).length;qsa('[data-online-count]').forEach(el=>el.textContent=online+' online');const active=IDS.map(id=>statusCache[id]).find(st=>st&&st.fn);if(active){qsa('[data-global-song]').forEach(el=>el.textContent=(active.fn||'').replace(/\.[^/.]+$/,''));qsa('[data-global-sub]').forEach(el=>el.textContent=(active.src==='live'?'Live Source':'Local Playlist')+' · '+(active.st||'playing'))}}
+function refreshAllZones(){IDS.forEach(refreshZone);const online=IDS.filter(id=>isOnline(statusCache[id])).length;qsa('[data-online-count]').forEach(el=>el.textContent=online+' online');const active=IDS.map(id=>statusCache[id]).find(st=>st&&st.fn);if(active){qsa('[data-global-song]').forEach(el=>el.textContent=(active.fn||'').replace(/\.[^/.]+$/,''));qsa('[data-global-sub]').forEach(el=>el.textContent='Local Playlist · '+(active.st||'playing'))}}
 function isOnline(st){return !!(st&&st.ts&&Date.now()-st.ts<8000)}
-function refreshZone(id){const st=statusCache[id]||{},on=isOnline(st),state=st.st||'offline',isPlay=on&&(state==='playing'||state==='live');qsa(`[data-status="${id}"]`).forEach(el=>{const color=on?(isPlay?'#22c55e':'#f59e0b'):'#cbd5e1';el.innerHTML=`<span class="dot" style="background:${color};box-shadow:${isPlay?'0 0 0 5px rgba(34,197,94,.12)':'none'}"></span>${(on?(st.muted?'🔇 ':'')+state:'OFFLINE').toUpperCase()}`;el.style.color=on?(isPlay?'#16a34a':'#b45309'):'#8a94a8'});qsa(`[data-nowplaying="${id}"]`).forEach(el=>{el.style.display=(st.fn&&on)?'block':'none'});if(st.fn&&on){qsa(`[data-song="${id}"]`).forEach(el=>el.textContent=st.fn.replace(/\.[^/.]+$/,''));qsa(`[data-track="${id}"]`).forEach(el=>el.textContent=st.src==='live'?'LIVE':`${(st.idx||0)+1}/${st.total||0}`);qsa(`[data-cur="${id}"]`).forEach(el=>el.textContent=fT(st.pos));qsa(`[data-dur="${id}"]`).forEach(el=>el.textContent=fT(st.dur));qsa(`[data-progress="${id}"]`).forEach(el=>el.style.width=st.dur>0?(st.pos/st.dur*100)+'%':'0%');qsa(`[data-source="${id}"]`).forEach(el=>el.textContent=st.fn.replace(/\.[^/.]+$/,''))}else{qsa(`[data-source="${id}"]`).forEach(el=>el.textContent=DEFAULT_SRC[id-1]||'Local Playlist')}
-  qsa(`[data-badge="${id}"]`).forEach(el=>{el.className='badge'+(on?'':' gray');el.innerHTML=`<span class="dot" style="background:${on?(isPlay?'#22c55e':'#f59e0b'):'#94a3b8'}"></span>${on?(isPlay?'Playing':'Ready'):'Offline'}`});qsa(`[data-mute="${id}"]`).forEach(el=>{el.textContent=st.muted?'🔇':'🔊';el.classList.toggle('muted',!!st.muted)});if(st.src){updateModeButtons(id,st.src,false)} }
-function updateModeButtons(id,src){qsa(`[data-mode-btn^="${id}:"]`).forEach(btn=>btn.classList.toggle('on',btn.dataset.modeBtn===`${id}:${src}`))}
+function refreshZone(id){const st=statusCache[id]||{},on=isOnline(st),state=st.st||'offline',isPlay=on&&(state==='playing');qsa(`[data-status="${id}"]`).forEach(el=>{const color=on?(isPlay?'#22c55e':'#f59e0b'):'#cbd5e1';el.innerHTML=`<span class="dot" style="background:${color};box-shadow:${isPlay?'0 0 0 5px rgba(34,197,94,.12)':'none'}"></span>${(on?(st.muted?'🔇 ':'')+state:'OFFLINE').toUpperCase()}`;el.style.color=on?(isPlay?'#16a34a':'#b45309'):'#8a94a8'});qsa(`[data-nowplaying="${id}"]`).forEach(el=>{el.style.display=(st.fn&&on)?'block':'none'});if(st.fn&&on){qsa(`[data-song="${id}"]`).forEach(el=>el.textContent=st.fn.replace(/\.[^/.]+$/,''));qsa(`[data-track="${id}"]`).forEach(el=>el.textContent=`${(st.idx||0)+1}/${st.total||0}`);qsa(`[data-cur="${id}"]`).forEach(el=>el.textContent=fT(st.pos));qsa(`[data-dur="${id}"]`).forEach(el=>el.textContent=fT(st.dur));qsa(`[data-progress="${id}"]`).forEach(el=>el.style.width=st.dur>0?(st.pos/st.dur*100)+'%':'0%');qsa(`[data-source="${id}"]`).forEach(el=>el.textContent=st.fn.replace(/\.[^/.]+$/,''))}else{qsa(`[data-source="${id}"]`).forEach(el=>el.textContent=DEFAULT_SRC[id-1]||'Local Playlist')}
+  qsa(`[data-badge="${id}"]`).forEach(el=>{el.className='badge'+(on?'':' gray');el.innerHTML=`<span class="dot" style="background:${on?(isPlay?'#22c55e':'#f59e0b'):'#94a3b8'}"></span>${on?(isPlay?'Playing':'Ready'):'Offline'}`});qsa(`[data-mute="${id}"]`).forEach(el=>{el.textContent=st.muted?'🔇':'🔊';el.classList.toggle('muted',!!st.muted)})}
 function listen(){IDS.forEach(id=>{db.ref(`players/${id}/status`).on('value',s=>{statusCache[id]=s.val()||{};refreshZone(id);refreshAllZones()})});setInterval(refreshAllZones,3000)}
 function sendCmd(id,a){db.ref(`players/${id}/command`).set({action:a,ts:Date.now()})}
 function sendVol(id,v){qsa(`[data-vol-display="${id}"]`).forEach(el=>el.textContent=v);qsa(`[data-vol-range="${id}"]`).forEach(el=>{if(String(el.value)!==String(v))el.value=v});db.ref(`players/${id}/command`).set({action:'volume',volume:Number(v)/100,ts:Date.now()})}
-function setSrc(id,s){updateModeButtons(id,s);db.ref(`players/${id}/command`).set({action:'source',source:s,ts:Date.now()})}
 async function togM(id){const s=await db.ref(`players/${id}/status`).get();const st=s.val();db.ref(`players/${id}/command`).set({action:'mute',mute:!(st&&st.muted),ts:Date.now()})}
 function masterCmd(a){IDS.forEach(id=>db.ref(`players/${id}/command`).set({action:a,ts:Date.now()}))}
 function masterMuteToggle(){allMuted=!allMuted;IDS.forEach(id=>db.ref(`players/${id}/command`).set({action:'mute',mute:allMuted,ts:Date.now()}))}
